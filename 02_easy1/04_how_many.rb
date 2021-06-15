@@ -22,7 +22,8 @@
 def count_occurrences(array)
   occurrences = {}
 
-  array.uniq.each { |e| occurrences[e.to_sym] = array.count(e) }
+  array_ci = array.map(&:downcase)
+  array_ci.uniq.each { |e| occurrences[e.to_sym] = array_ci.count(e) }
 
   occurrences
 end
