@@ -24,11 +24,8 @@ def count_occurrences(array)
 
   array.each do |e|
     current_symbol = e.to_sym
-    count_new = 0
-    symbol_count = hash_counter[current_symbol]
-    count_new = symbol_count unless symbol_count.nil?
-    count_new += 1
-    hash_counter[current_symbol] = count_new
+    count_new = hash_counter[current_symbol] || 0
+    hash_counter[current_symbol] = count_new + 1
   end
 
   hash_counter
