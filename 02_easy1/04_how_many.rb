@@ -6,29 +6,25 @@
 
 # Given an array of objects
 #
-# SET hash_counter to empty hash
+# SET occurrences to empty hash
 #
 # FOR each string in array
 #   SET current_symbol to object symbol representation
 #   SET count_new to 0
-#   SET symbol_count to current_symbol value in hash_counter
+#   SET symbol_count to current_symbol value in occurrences
 #   IF symbol_count exists
 #     SET count_new = symbol_count
 #   ENDIF
 #   INCREMENT count_new
-#   SET current_symbol value in hash_counter to count_new
+#   SET current_symbol value in occurrences to count_new
 # ENDFOR
 
 def count_occurrences(array)
-  hash_counter = {}
+  occurrences = {}
 
-  array.each do |e|
-    current_symbol = e.to_sym
-    count_new = hash_counter[current_symbol] || 0
-    hash_counter[current_symbol] = count_new + 1
-  end
+  array.uniq.each { |e| occurrences[e.to_sym] = array.count(e) }
 
-  hash_counter
+  occurrences
 end
 
 vehicles = %w[
@@ -36,4 +32,6 @@ vehicles = %w[
   motorcycle motorcycle car truck
 ]
 
-p count_occurrences(vehicles)
+occurrences = count_occurrences(vehicles)
+
+occurrences.each { |k, v| puts "#{k} => #{v}" }
