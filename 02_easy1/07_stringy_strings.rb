@@ -19,13 +19,8 @@
 # UNTIL count == integer
 
 def stringy(int)
-  count = 0
   string = String.new
-  loop do
-    count += 1
-    string += (count.odd? ? '1' : '0')
-    break if count == int
-  end
+  int.times { |i| string += (i.even? ? '1' : '0') }
   string
 end
 
