@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 def reverse_sentence(sentence)
-  return '' unless sentence.strip.length.positive?
-
   sentence.split.reverse.join(' ')
 end
 
