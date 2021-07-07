@@ -4,16 +4,16 @@
 
 # Pseudocode:
 
-# number = 2
+# number = 1
 #
-# WHILE number < 99
-#   PRINT number on a separate line
-#   INCREMENT number by 2
+# WHILE number <= 99
+#   PRINT number on a separate line if number is even
+#   INCREMENT number by 1
 # ENDWHILE
 
-number = 2
+number = 1
 
-while number <= 98
-  puts number
-  number += 2
+while number <= 99
+  puts number if number.even?
+  number += 1
 end
