@@ -16,3 +16,7 @@ while number <= 99
   puts number
   number += 2
 end
+
+# Other approaches (less efficient)
+1.upto(99) { |num| puts num if num.odd? }
+(1..99).select(&:odd?).each { |num| puts num }
