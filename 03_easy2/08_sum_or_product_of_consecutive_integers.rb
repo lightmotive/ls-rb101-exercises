@@ -14,9 +14,8 @@
 #
 # PRINT "The {operation} of the integers between 1 and {integer} is {computed value}."
 
-def prompt(message)
-  print ">> #{message} "
-end
+require_relative '../../ruby-common/validation_error'
+require_relative '../../ruby-common/prompt'
 
 def compute(start_number, max_number, operation)
   range = (start_number..max_number)
@@ -36,11 +35,20 @@ end
 
 START_NUMBER = 1
 
-prompt('Please enter an integer greater than 0 that will serve as a maximum:')
-max_number = gets.chomp.to_i
+max_number = prompt_until_valid(
+  'Please enter an integer greater than 0 that will serve as a maximum.',
+  convert_input: ->(input) { input.to_i },
+  validate: ->(integer) { raise StandardError unless integer.positive? }
+)
 
-prompt("Enter 's' to compute the sum or 'p' to compute the product :")
-operation = gets.strip.downcase
+operation = prompt_until_valid(
+  "Enter 's' to compute the sum or 'p' to compute the product.",
+  get_input: -> { gets.strip },
+  convert_input: ->(input) { input.downcase },
+  validate: lambda { |input_converted|
+              raise StandardError unless %w[s p].include?(input_converted)
+            }
+)
 
 puts "The #{operation_display(operation)} of the integers between #{START_NUMBER} and #{max_number} is #{compute(
   START_NUMBER, max_number, operation
