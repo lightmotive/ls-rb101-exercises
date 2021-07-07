@@ -3,5 +3,4 @@
 print 'What is your name? '
 name = gets.strip
 
-output = "Hello, #{name}"
-puts name.end_with?('!') ? "#{output} Why are we screaming? 8-|".upcase : "#{output} :-)"
+puts name.end_with?('!') ? "HELLO #{name.chop.upcase}! WHY ARE WE SCREAMING?! 8-|" : "Hello #{name} :-)"
