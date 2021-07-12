@@ -15,12 +15,9 @@ end
 
 numbers = []
 
-track_number numbers, prompt_number('Enter the 1st number')
-track_number numbers, prompt_number('Enter the 2nd number')
-track_number numbers, prompt_number('Enter the 3rd number')
-track_number numbers, prompt_number('Enter the 4th number')
-track_number numbers, prompt_number('Enter the 5th number')
-
+%w[1st 2nd 3rd 4th 5th].each do |word|
+  track_number numbers, prompt_number("Enter the #{word} number")
+end
 last_number = prompt_number('Enter the last number')
 
 puts "The number #{last_number} #{numbers.include?(last_number) ? 'appears' : 'does not appear'} in #{numbers}."
