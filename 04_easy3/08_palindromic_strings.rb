@@ -6,6 +6,7 @@ end
 
 def real_palindrome?(string)
   palindrome?(string.gsub(/\W/, '').downcase)
+  # Another approach: palindrome?(string.downcase.delete('^a-z0-9'))
 end
 
 p palindrome?('madam') == true
