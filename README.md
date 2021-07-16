@@ -2,7 +2,7 @@
 
 ## Helpful shell scripts
 - Create Ruby exercise files with default content:
-  ```ruby
+  ```bash
   file_names=(name1 name2)
   for name in $file_names; do touch "$name.rb"; printf '# frozen_string_literal: true\n' > "$name.rb"; done
   ```
