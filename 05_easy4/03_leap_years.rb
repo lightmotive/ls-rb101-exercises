@@ -16,6 +16,10 @@
 #       - Leap years are evenly divisible by 400
 #       - Leap years are evenly divisible by 4 when not divisible by 100
 
+# Interesting note: Pope Gregory XIII created the Gregorian calendar (1 year = 365.2425 days) because the Julian
+# calendar (1 year = 365.25 days) had a rounding error. Most civilizations use the Gregorian calendar; other ancient
+# calendars are used mostly for ceremonial purposes.
+
 def leap_year?(year)
   raise StandardError, 'The year must be greater than 0.' unless year.positive?
 
