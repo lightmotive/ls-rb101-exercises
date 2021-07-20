@@ -18,17 +18,15 @@ DIGITS =
     'e' => 14,
     'f' => 15 }.freeze
 
-# Returns the string and the original sign multiplier
 def string_to_integer_abs(string)
   sign_multiplier = 1
   string_abs = String.new(string)
+  prefix = string[0]
 
-  if string_abs.start_with?('-')
-    string_abs.delete_prefix!('-')
-    sign_multiplier = -1
+  if %w[- +].include?(prefix)
+    sign_multiplier = -1 if prefix == '-'
+    string_abs = string[1..-1]
   end
-
-  string_abs.delete_prefix!('+') if string_abs.start_with?('+')
 
   [string_abs, sign_multiplier]
 end
