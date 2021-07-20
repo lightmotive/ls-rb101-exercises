@@ -5,13 +5,7 @@ def multiple?(number, divisor)
 end
 
 def multisum(max_integer)
-  sum = 0
-
-  1.upto(max_integer) do |current_integer|
-    sum += current_integer if multiple?(current_integer, 3) || multiple?(current_integer, 5)
-  end
-
-  sum
+  1.upto(max_integer).select { |int| multiple?(int, 3) || multiple?(int, 5) }.sum
 end
 
 p multisum(3) == 3
