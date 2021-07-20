@@ -2,22 +2,29 @@
 
 DIGITS = %w[0 1 2 3 4 5 6 7 8 9].freeze
 
+def integer_to_sign(integer)
+  return '-' if integer.negative?
+
+  ''
+end
+
 def integer_to_string(integer)
   string = String.new
-  quotient = integer
+  quotient = integer.abs
 
   loop do
-    integer, remainder = integer.divmod(10)
+    quotient, remainder = quotient.divmod(10)
     string.prepend(DIGITS[remainder])
     break if quotient.zero?
   end
 
-  string
+  string.prepend(integer_to_sign(integer))
 end
 
 p integer_to_string(4321) == '4321'
 p integer_to_string(0) == '0'
 p integer_to_string(5000) == '5000'
+p integer_to_string(-123) == '-123'
 
 # Mutating string methods without bang in Ruby v3.0.1:
 #
