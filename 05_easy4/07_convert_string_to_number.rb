@@ -18,14 +18,35 @@ DIGITS =
     'e' => 14,
     'f' => 15 }.freeze
 
+# Returns the string and the original sign multiplier
+def string_to_integer_abs(string)
+  sign_multiplier = 1
+  string_abs = String.new(string)
+
+  if string_abs.start_with?('-')
+    string_abs.delete_prefix!('-')
+    sign_multiplier = -1
+  end
+
+  string_abs.delete_prefix!('+') if string_abs.start_with?('+')
+
+  [string_abs, sign_multiplier]
+end
+
 def string_to_integer(string, base = 10)
   number = 0
-  string.downcase.chars.each do |char|
+
+  string_abs, sign_multiplier = string_to_integer_abs(string)
+
+  string_abs.downcase.chars.each do |char|
     number = (number * base) + DIGITS[char]
   end
-  number
+
+  number * sign_multiplier
 end
 
 p string_to_integer('4321') == 4321
 p string_to_integer('570') == 570
 p string_to_integer('4D9f', 16) == 19_871
+p string_to_integer('-570') == -570
+p string_to_integer('+100') == 100
