@@ -10,15 +10,22 @@ DIGITS =
     '6' => 6,
     '7' => 7,
     '8' => 8,
-    '9' => 9 }.freeze
+    '9' => 9,
+    'a' => 10,
+    'b' => 11,
+    'c' => 12,
+    'd' => 13,
+    'e' => 14,
+    'f' => 15 }.freeze
 
-def string_to_integer(string)
+def string_to_integer(string, base = 10)
   number = 0
-  string.chars.each do |char|
-    number = (number * 10) + DIGITS[char]
+  string.downcase.chars.each do |char|
+    number = (number * base) + DIGITS[char]
   end
   number
 end
 
 p string_to_integer('4321') == 4321
 p string_to_integer('570') == 570
+p string_to_integer('4D9f', 16) == 19_871
