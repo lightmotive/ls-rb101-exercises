@@ -13,11 +13,9 @@ DIGITS =
     '9' => 9 }.freeze
 
 def string_to_integer(string)
-  place_value = string.length
   number = 0
   string.chars.each do |char|
-    number += (DIGITS[char] * (10**(place_value - 1)))
-    place_value -= 1
+    number = (number * 10) + DIGITS[char]
   end
   number
 end
