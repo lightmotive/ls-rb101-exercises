@@ -9,6 +9,8 @@
 MINUTES_PER_DAY = 1440
 MINUTES_PER_HOUR = 60
 SECONDS_PER_MINUTE = 60
+# NOTE: an application would put this object in a language-specific localization file.
+WEEKDAYS_FOR_TIME_CLASS = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday].freeze
 
 def hours_and_minutes(minutes)
   minutes.divmod(60)
@@ -32,3 +34,16 @@ p time_of_day(-1437) == '00:03'
 p time_of_day(3000) == '02:00'
 p time_of_day(800) == '13:20'
 p time_of_day(-4231) == '01:29'
+
+# Further exploration 3 - assumes UTC-0
+def weekday_and_time_of_day(minutes)
+  time = Time.new(2021, 7, 18)
+  time_offset = time + (minutes * SECONDS_PER_MINUTE)
+  hours = time_offset.hour
+  minutes = time_offset.min
+  format('%<weekday>s %<hours>02d:%<minutes>02d',
+         weekday: WEEKDAYS_FOR_TIME_CLASS[time_offset.wday],
+         hours: hours, minutes: minutes)
+end
+
+p weekday_and_time_of_day(-4231) == 'Thursday 01:29'
