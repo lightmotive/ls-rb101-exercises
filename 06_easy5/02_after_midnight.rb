@@ -33,9 +33,9 @@ p time_of_day(-4231) == '01:29'
 
 # Further exploration 3 - assumes UTC-0
 def weekday_and_time_of_day(minutes)
-  time = Time.new(2021, 7, 18)
-  time_offset = time + (minutes * SECONDS_PER_MINUTE)
-  time_offset.strftime('%A %H:%M')
+  time_base_sunday = Time.new(2021, 7, 18)
+  time = time_base_sunday + (minutes * SECONDS_PER_MINUTE)
+  time.strftime('%A %H:%M')
 end
 
 p weekday_and_time_of_day(-4231) == 'Thursday 01:29'
