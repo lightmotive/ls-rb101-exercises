@@ -22,3 +22,8 @@ p ascii_value('Four score') == 984
 p ascii_value('Launch School') == 1251
 p ascii_value('a') == 97
 p ascii_value('') == 0
+
+# Further exploration: convert an integer to a character with optional encoding specification
+# Integer#chr([encoding])
+p(('a'.ord.chr == 'a') == true)
+p 'ab'.ord.chr # It's good to know that String#ord will only use the first character of multi-char string.
