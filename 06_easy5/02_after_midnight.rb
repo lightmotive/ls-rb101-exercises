@@ -8,13 +8,20 @@
 
 MINUTES_PER_DAY = 1440
 MINUTES_PER_HOUR = 60
+SECONDS_PER_MINUTE = 60
 
 def hours_and_minutes(minutes)
   minutes.divmod(60)
 end
 
 def time_of_day(minutes)
-  hours, minutes = (minutes % MINUTES_PER_DAY).divmod(MINUTES_PER_HOUR)
+  # Solution using % and divmod
+  # hours, minutes = (minutes % MINUTES_PER_DAY).divmod(MINUTES_PER_HOUR)
+
+  # Solution using Time class
+  time = Time.at(minutes * SECONDS_PER_MINUTE)
+  hours = time.hour
+  minutes = time.min
   format('%<hours>02d:%<minutes>02d', hours: hours, minutes: minutes)
 end
 
