@@ -2,10 +2,8 @@
 
 def swap(sentence)
   sentence.split.map do |word|
-    chars = word.chars
-    chars[0] = word.chars.last
-    chars[-1] = word.chars.first
-    chars.join
+    word[0], word[-1] = word[-1], word[0]
+    word
   end.join(' ')
 end
 
