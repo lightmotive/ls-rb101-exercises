@@ -42,7 +42,8 @@ TEST_DATA = {
   short2: { input: '4444abcabccba', expected_output: '4abcabcba' },
   short3: { input: 'ggggggggggggggg', expected_output: 'g' },
   short4: { input: 'a', expected_output: 'a' },
-  short5: { input: '', expected_output: '' }
+  short5: { input: '', expected_output: '' },
+  long1: { input: 'ddaaiillyy ddoouubbllee ' * 500, expected_output: 'daily double ' * 500 }
 }.freeze
 
 TEST_DATA.each do |name, data|
@@ -51,8 +52,8 @@ end
 
 # Refactor the following into a reusable class that can accept any number of implementations:
 benchmark_count = 5
-iteration_count = 50_000
-puts "\nWhich one is faster_time with #{iteration_count} iterations?"
+iteration_count = 1000
+puts "\nWhich one is faster with #{iteration_count} iterations?\n\n"
 
 IMPLEMENTATIONS = [
   { label: 'Iteration', method: ->(string) { crunch_iterate(string) } },
@@ -95,12 +96,14 @@ def report_top_two(implementations, benchmark_count)
   first = build_details(sorted_by_total[0], benchmark_count)
   second = build_details(sorted_by_total[1], benchmark_count)
 
-  puts format('%<faster_implementation_label>s was faster than %<slower_implementation_label>s by about %<speed_difference>.0f%% (%<first_time>.4fs vs %<second_time>.4fs).',
-              faster_implementation_label: first[:label],
-              slower_implementation_label: second[:label],
+  puts format('%<faster_label>s was faster than %<slower_label>s by about %<speed_difference>.0f%% ' \
+              '(average %<first_time>.4fs vs %<second_time>.4fs).',
+              faster_label: first[:label],
+              slower_label: second[:label],
               first_time: first[:average_seconds],
               second_time: second[:average_seconds],
               speed_difference: calculate_speed_difference(first, second) * 100)
 end
 
+puts
 report_top_two(IMPLEMENTATIONS, benchmark_count)
