@@ -16,21 +16,26 @@
 #
 # RETURN deduplicated_string
 
+# def crunch(string)
+#   last_char = nil
+#   deduplicated_string = String.new
+
+#   string.each_char do |char|
+#     if char != last_char
+#       deduplicated_string << char
+#       last_char = char
+#     end
+#   end
+
+#   deduplicated_string
+# end
+
+# Another solution using a fairly simple regular expression with a backreference
 def crunch(string)
-  last_char = nil
-  deduplicated_string = String.new
-
-  string.each_char do |char|
-    if char != last_char
-      deduplicated_string << char
-      last_char = char
-    end
-  end
-
-  deduplicated_string
+  string.gsub(/(.)\1+/, '\1')
 end
 
-p crunch('ddaaiillyy ddoouubbllee') == 'daily double'
+p crunch('ddaaiillyy  ddoouubbllee') == 'daily double'
 p crunch('4444abcabccba') == '4abcabcba'
 p crunch('ggggggggggggggg') == 'g'
 p crunch('a') == 'a'
