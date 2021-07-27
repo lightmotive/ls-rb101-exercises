@@ -16,7 +16,7 @@ def print_in_box(message)
 
   puts top_bottom
   puts spacer
-  puts message_line('|', message, padding_length)
+  puts message_line('|', padding_length, message)
   puts spacer
   puts top_bottom
 end
