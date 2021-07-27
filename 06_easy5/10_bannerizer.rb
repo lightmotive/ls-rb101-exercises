@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-def box_line(side_char, middle_char, count, padding_length)
-  "#{side_char}#{middle_char * (count + (padding_length * 2))}#{side_char}"
+def box_line(side_char, middle_char, middle_length, padding_length)
+  "#{side_char}#{middle_char * (middle_length + (padding_length * 2))}#{side_char}"
 end
 
 def message_line(edge_char, padding_length, message)
