@@ -1,18 +1,22 @@
 # frozen_string_literal: true
 
-def box_line(side_char, middle_char, count, padding)
-  "#{side_char}#{middle_char * (count + (padding * 2))}#{side_char}"
+def box_line(side_char, middle_char, count, padding_length)
+  "#{side_char}#{middle_char * (count + (padding_length * 2))}#{side_char}"
+end
+
+def message_line(edge_char, padding_length, message)
+  "#{edge_char}#{' ' * padding_length}#{message}#{' ' * padding_length}#{edge_char}"
 end
 
 def print_in_box(message)
   length = message.length
-  padding = 1
-  top_bottom = box_line('+', '-', length, padding)
-  spacer = box_line('|', ' ', length, padding)
+  padding_length = 1
+  top_bottom = box_line('+', '-', length, padding_length)
+  spacer = box_line('|', ' ', length, padding_length)
 
   puts top_bottom
   puts spacer
-  puts "|#{' ' * padding}#{message}#{' ' * padding}|"
+  puts message_line('|', message, padding_length)
   puts spacer
   puts top_bottom
 end
