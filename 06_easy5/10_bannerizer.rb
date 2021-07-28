@@ -4,57 +4,91 @@ def box_width(padding_length)
   2 + (padding_length * 2)
 end
 
-def box_line(side_char, middle_char, middle_length, padding_length, width_limit: 80)
+def message_width_limit(width_limit, padding_length)
+  width_limit - box_width(padding_length)
+end
+
+def box_line(side_char, middle_char, middle_length, padding_length, width_limit)
   box_width = box_width(padding_length)
   middle_length = width_limit - box_width unless middle_length < width_limit - box_width
 
   "#{side_char}#{middle_char * (middle_length + (padding_length * 2))}#{side_char}"
 end
 
-def message_line_slice!(message_current, message_original, message_line_width_limit)
-  message_line = message_current.slice!(0, message_line_width_limit)
-  # Possible improvement: avoid splitting words (add space to replace what's wrapped)
-
-  # Add space if last line:
-  if message_line.length < message_line_width_limit && message_original.length > message_line_width_limit
-    message_line << ' ' * (message_line_width_limit - message_line.length)
-  end
-
-  message_line
+def message_line_normalized_width(message_line, longest_line_width)
+  end_of_line_padding = ' ' * (longest_line_width - message_line.length)
+  message_line + end_of_line_padding
 end
 
-def message_line_format(edge_char, padding_length, message_current, message_original, width_limit)
-  box_width = box_width(padding_length)
-  message_line_width_limit = width_limit - box_width
-
+def message_line_format(edge_char, padding_length, message_line, longest_line_width)
   "#{edge_char}#{' ' * padding_length}" \
-  "#{message_line_slice!(message_current, message_original, message_line_width_limit)}" \
+  "#{message_line_normalized_width(message_line, longest_line_width)}" \
   "#{' ' * padding_length}#{edge_char}"
 end
 
-def message_line(edge_char, padding_length, message, width_limit: 80)
-  msg = String.new(message)
-  message_wrapped = String.new
+def message_words(message, message_width_limit)
+  words = message.split
+  words_final = []
 
-  loop do
-    message_wrapped << message_line_format(edge_char, padding_length, msg, message, width_limit)
-    break if msg.length.zero?
-
-    message_wrapped << "\n"
+  words.each do |word|
+    if word.length <= message_width_limit
+      words_final << word
+    else
+      words_final << word.slice!(0, message_width_limit) until word.length.zero?
+    end
   end
 
-  message_wrapped
+  words_final
 end
 
-def print_in_box(message)
-  length = message.length
-  padding_length = 1
-  top_bottom = box_line('+', '-', length, padding_length)
-  spacer = box_line('|', ' ', length, padding_length)
+def add_space?(line)
+  !line.empty?
+end
+
+def append_word_to_line?(line, word, message_width_limit)
+  return false if word.nil?
+  return true if line.empty? && word.length == message_width_limit
+
+  add_length = (add_space?(line) ? 1 : 0) + word.length
+  line.length + add_length < message_width_limit
+end
+
+# rubocop:disable Metrics/MethodLength
+def message_lines(words, message_width_limit)
+  lines = []
+  line = String.new
+
+  until words.empty? && line.empty?
+    if append_word_to_line?(line, words[0], message_width_limit)
+      line << ((add_space?(line) ? ' ' : '') + words.shift)
+    else
+      lines << line
+      line = String.new
+    end
+  end
+
+  lines
+end
+# rubocop:enable Metrics/MethodLength
+
+def split_message(message, width_limit, padding_length)
+  message_width_limit = message_width_limit(width_limit, padding_length)
+  words = message_words(message, message_width_limit)
+
+  return [''] if words.empty?
+
+  message_lines(words, message_width_limit)
+end
+
+def print_in_box(message, width_limit: 80, padding_length: 1)
+  lines = split_message(message, width_limit, padding_length)
+  longest_line_width = lines.max { |a, b| a.length <=> b.length }.length
+  top_bottom = box_line('+', '-', longest_line_width, padding_length, width_limit)
+  spacer = box_line('|', ' ', longest_line_width, padding_length, width_limit)
 
   puts top_bottom
   puts spacer
-  puts message_line('|', padding_length, message)
+  lines.each { |line| puts message_line_format('|', padding_length, line, longest_line_width) }
   puts spacer
   puts top_bottom
 end
@@ -75,3 +109,27 @@ print_in_box('')
 
 print_in_box('Chocolate is a perfect food, as wholesome as it is delicious, a beneficent restorer of exhausted ' \
   'power...it is the best friend of those engaged in literary pursuits. --Justus von Liebig')
+# +----------------------------------------------------------------------------+
+# |                                                                            |
+# | Chocolate is a perfect food, as wholesome as it is delicious, a beneficent |
+# | restorer of exhausted power...it is the best friend of those engaged in    |
+# | literary pursuits. --Justus von Liebig                                     |
+# |                                                                            |
+# +----------------------------------------------------------------------------+
+
+print_in_box('Lopadotemachoselachogaleokranioleipsanodrimhypotrimmatosilphiokarabomelitokatakechymenoki' \
+  'chlepikossyphophattoperisteralektryonoptekephalliokigklopeleiolagoiosiraiobaphetraganopterygon is a ' \
+  "fictional dish mentioned in Aristophanes' comedy Assemblywomen. --https://en.wikipedia.org/wiki/Lop" \
+  'adotemachoselachogaleokranioleipsanodrimhypotrimmatosilphiokarabomelitokatakechymenokichlepikossyph' \
+  'ophattoperisteralektryonoptekephalliokigklopeleiolagoiosiraiobaphetraganopterygon')
+# +------------------------------------------------------------------------------+
+# |                                                                              |
+# | Lopadotemachoselachogaleokranioleipsanodrimhypotrimmatosilphiokarabomelitoka |
+# | takechymenokichlepikossyphophattoperisteralektryonoptekephalliokigklopeleiol |
+# | agoiosiraiobaphetraganopterygon is a fictional dish mentioned in             |
+# | Aristophanes' comedy Assemblywomen.                                          |
+# | --https://en.wikipedia.org/wiki/Lopadotemachoselachogaleokranioleipsanodrimh |
+# | ypotrimmatosilphiokarabomelitokatakechymenokichlepikossyphophattoperisterale |
+# | ktryonoptekephalliokigklopeleiolagoiosiraiobaphetraganopterygon              |
+# |                                                                              |
+# +------------------------------------------------------------------------------+
