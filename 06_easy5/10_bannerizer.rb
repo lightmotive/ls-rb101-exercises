@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-def padding_length_total(padding_length)
+def box_width(padding_length)
   2 + (padding_length * 2)
 end
 
 def box_line(side_char, middle_char, middle_length, padding_length, width_limit: 80)
-  padding_length_total = padding_length_total(padding_length)
-  middle_length = width_limit - padding_length_total unless middle_length < width_limit - padding_length_total
+  box_width = box_width(padding_length)
+  middle_length = width_limit - box_width unless middle_length < width_limit - box_width
 
   "#{side_char}#{middle_char * (middle_length + (padding_length * 2))}#{side_char}"
 end
@@ -24,8 +24,8 @@ def message_line_slice!(message_current, message_original, message_line_width_li
 end
 
 def message_line_format(edge_char, padding_length, message_current, message_original, width_limit)
-  padding_length_total = padding_length_total(padding_length)
-  message_line_width_limit = width_limit - padding_length_total
+  box_width = box_width(padding_length)
+  message_line_width_limit = width_limit - box_width
 
   "#{edge_char}#{' ' * padding_length}" \
   "#{message_line_slice!(message_current, message_original, message_line_width_limit)}" \
