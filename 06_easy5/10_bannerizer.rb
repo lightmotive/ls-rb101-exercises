@@ -26,6 +26,7 @@ def message_line_format(edge_char, padding_length, message_line, longest_line_wi
   "#{' ' * padding_length}#{edge_char}"
 end
 
+# Split words that might exceed the message width limit
 def message_words(message, message_width_limit)
   words = message.split
   words_final = []
@@ -54,6 +55,7 @@ def append_word_to_line?(line, word, message_width_limit)
 end
 
 # rubocop:disable Metrics/MethodLength
+# Build message lines from words array.
 def message_lines(words, message_width_limit)
   lines = []
   line = String.new
@@ -71,6 +73,7 @@ def message_lines(words, message_width_limit)
 end
 # rubocop:enable Metrics/MethodLength
 
+# Split a message into words, including word splitting when words exceed message width limit.
 def split_message(message, width_limit, padding_length)
   message_width_limit = message_width_limit(width_limit, padding_length)
   words = message_words(message, message_width_limit)
@@ -80,6 +83,7 @@ def split_message(message, width_limit, padding_length)
   message_lines(words, message_width_limit)
 end
 
+# Split a message into lines, then print a box that fits the longest line. Shorter lines are padded to match longest line.
 def print_in_box(message, width_limit: 80, padding_length: 1)
   lines = split_message(message, width_limit, padding_length)
   longest_line_width = lines.max { |a, b| a.length <=> b.length }.length
