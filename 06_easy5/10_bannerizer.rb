@@ -15,14 +15,14 @@ def box_line(side_char, middle_char, middle_length, padding_length, width_limit)
   "#{side_char}#{middle_char * (middle_length + (padding_length * 2))}#{side_char}"
 end
 
-def message_line_normalized_width(message_line, longest_line_width)
-  end_of_line_padding = ' ' * (longest_line_width - message_line.length)
-  message_line + end_of_line_padding
+def message_line_normalized_width(words, longest_line_width)
+  end_of_line_padding = ' ' * (longest_line_width - line_length(words))
+  words.join(' ') + end_of_line_padding
 end
 
-def message_line_format(edge_char, padding_length, message_line, longest_line_width)
+def message_line_format(edge_char, padding_length, words, longest_line_width)
   "#{edge_char}#{' ' * padding_length}" \
-  "#{message_line_normalized_width(message_line, longest_line_width)}" \
+  "#{message_line_normalized_width(words, longest_line_width)}" \
   "#{' ' * padding_length}#{edge_char}"
 end
 
@@ -46,39 +46,41 @@ def add_space?(line)
   !line.empty?
 end
 
-def append_word_to_line?(line, word, message_width_limit)
-  return false if word.nil?
-  return true if line.empty? && word.length == message_width_limit
+# Calculate line length, including spaces
+def line_length(words)
+  words_length = words.reduce(0) { |sum, word| sum + word.length }
+  spaces_length = words.size > 1 ? words.size - 1 : 0
 
-  add_length = (add_space?(line) ? 1 : 0) + word.length
-  line.length + add_length < message_width_limit
+  words_length + spaces_length
 end
 
-# rubocop:disable Metrics/MethodLength
+def append_next_word?(line, words, message_width_limit)
+  return false if words.empty?
+  return true if line.empty? && words[0].length == message_width_limit
+
+  line_length(line + [words[0]]) < message_width_limit
+end
+
 # Build message lines from words array.
 def message_lines(words, message_width_limit)
   lines = []
-  line = String.new
+  line = []
 
   until words.empty? && line.empty?
-    if append_word_to_line?(line, words[0], message_width_limit)
-      line << ((add_space?(line) ? ' ' : '') + words.shift)
-    else
-      lines << line
-      line = String.new
-    end
+    line << words.shift while append_next_word?(line, words, message_width_limit)
+    lines << line
+    line = []
   end
 
   lines
 end
-# rubocop:enable Metrics/MethodLength
 
 # Split a message into words, including word splitting when words exceed message width limit.
 def split_message(message, width_limit, padding_length)
   message_width_limit = message_width_limit(width_limit, padding_length)
   words = message_words(message, message_width_limit)
 
-  return [''] if words.empty?
+  return [['']] if words.empty?
 
   message_lines(words, message_width_limit)
 end
@@ -86,7 +88,7 @@ end
 # Split a message into lines, then print a box that fits the longest line. Shorter lines are padded to match longest line.
 def print_in_box(message, width_limit: 80, padding_length: 1)
   lines = split_message(message, width_limit, padding_length)
-  longest_line_width = lines.max { |a, b| a.length <=> b.length }.length
+  longest_line_width = line_length(lines.max { |a, b| line_length(a) <=> line_length(b) })
   top_bottom = box_line('+', '-', longest_line_width, padding_length, width_limit)
   spacer = box_line('|', ' ', longest_line_width, padding_length, width_limit)
 
