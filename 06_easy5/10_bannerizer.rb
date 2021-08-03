@@ -61,13 +61,17 @@ def append_next_word?(line, words, message_width_limit)
   line_length(line + [words[0]]) < message_width_limit
 end
 
+def append_words_to_line!(line, words, message_width_limit)
+  line << words.shift while append_next_word?(line, words, message_width_limit)
+end
+
 # Build message lines from words array.
 def message_lines(words, message_width_limit)
   lines = []
   line = []
 
   until words.empty? && line.empty?
-    line << words.shift while append_next_word?(line, words, message_width_limit)
+    append_words_to_line!(line, words, message_width_limit)
     lines << line
     line = []
   end
