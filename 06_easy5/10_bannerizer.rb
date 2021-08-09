@@ -26,8 +26,8 @@ def message_line_format(edge_char, padding_length, words, longest_line_width)
   "#{' ' * padding_length}#{edge_char}"
 end
 
-# Split words that might exceed the message width limit
-def message_words(message, message_width_limit)
+# Split message into words, and split words that exceed the message width limit.
+def words(message, message_width_limit)
   words = message.split
   words_final = []
 
@@ -66,7 +66,7 @@ def build_line_from_words!(line, words, message_width_limit)
 end
 
 # Build message lines from words array.
-def message_lines(words, message_width_limit)
+def words_to_lines!(words, message_width_limit)
   lines = []
   line = []
 
@@ -80,18 +80,18 @@ def message_lines(words, message_width_limit)
 end
 
 # Split a message into words, including word splitting when words exceed message width limit.
-def split_message(message, width_limit, padding_length)
+def message_lines!(message, width_limit, padding_length)
   message_width_limit = message_width_limit(width_limit, padding_length)
-  words = message_words(message, message_width_limit)
+  words = words(message, message_width_limit)
 
   return [['']] if words.empty?
 
-  message_lines(words, message_width_limit)
+  words_to_lines!(words, message_width_limit)
 end
 
 # Split a message into lines, then print a box that fits the longest line. Shorter lines are padded to match longest line.
 def print_in_box(message, width_limit: 80, padding_length: 1)
-  lines = split_message(message, width_limit, padding_length)
+  lines = message_lines!(message, width_limit, padding_length)
   longest_line_width = line_length(lines.max { |a, b| line_length(a) <=> line_length(b) })
   top_bottom = box_line('+', '-', longest_line_width, padding_length, width_limit)
   spacer = box_line('|', ' ', longest_line_width, padding_length, width_limit)
