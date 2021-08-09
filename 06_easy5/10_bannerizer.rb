@@ -56,9 +56,9 @@ end
 
 def append_next_word?(line, words, message_width_limit)
   return false if words.empty?
-  return true if line.empty? && words[0].length == message_width_limit
+  return true if line.empty? && words.fetch(0).length == message_width_limit
 
-  line_length(line + [words[0]]) < message_width_limit
+  line_length(line + [words.fetch(0)]) < message_width_limit
 end
 
 def build_line_from_words!(line, words, message_width_limit)
