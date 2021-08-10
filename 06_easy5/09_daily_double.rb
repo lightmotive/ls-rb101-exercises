@@ -16,7 +16,7 @@
 #
 # RETURN deduplicated_string
 
-require 'benchmark'
+require_relative '../../ruby-common/benchmark_report'
 
 def crunch_iterate(string)
   last_char = nil
@@ -50,60 +50,8 @@ TEST_DATA.each do |name, data|
   puts "#{name}: #{crunch_regex(data[:input]) == data[:expected_output]}"
 end
 
-# Refactor the following into a reusable class that can accept any number of implementations:
-benchmark_count = 5
-iteration_count = 1000
-puts "\nWhich one is faster with #{iteration_count} iterations?\n\n"
-
-IMPLEMENTATIONS = [
-  { label: 'Iteration', method: ->(string) { crunch_iterate(string) } },
-  { label: 'Regex', method: ->(string) { crunch_regex(string) } }
-].freeze
-
-benchmark_count.times do
-  Benchmark.bm do |benchmark|
-    IMPLEMENTATIONS.each do |implementation|
-      implementation.default = 0.0
-      implementation[:total_seconds] += benchmark.report(implementation[:label]) do
-        iteration_count.times do
-          TEST_DATA.each do |_, data|
-            implementation[:method].call(data[:input])
-          end
-        end
-      end.total
-    end
-  end
-end
-
-def build_details(implementation, benchmark_count)
-  details = { label: implementation[:label], total_seconds: 0.0, average_seconds: 0.0 }
-
-  details[:total_seconds] = implementation[:total_seconds]
-  details[:average_seconds] = implementation[:total_seconds] / benchmark_count.to_f
-
-  details
-end
-
-def calculate_speed_difference(faster_details, slower_details)
-  faster_average = faster_details[:average_seconds]
-  slower_average = slower_details[:average_seconds]
-
-  (slower_average - faster_average) / slower_average
-end
-
-def report_top_two(implementations, benchmark_count)
-  sorted_by_total = implementations.sort_by { |implementation| implementation[:total_seconds] }
-  first = build_details(sorted_by_total[0], benchmark_count)
-  second = build_details(sorted_by_total[1], benchmark_count)
-
-  puts format('%<faster_label>s was faster than %<slower_label>s by about %<speed_difference>.0f%% ' \
-              '(average %<first_time>.4fs vs %<second_time>.4fs).',
-              faster_label: first[:label],
-              slower_label: second[:label],
-              first_time: first[:average_seconds],
-              second_time: second[:average_seconds],
-              speed_difference: calculate_speed_difference(first, second) * 100)
-end
-
-puts
-report_top_two(IMPLEMENTATIONS, benchmark_count)
+benchmark_report(5, 500, TEST_DATA,
+                 [
+                   { label: 'Iteration', method: ->(string) { crunch_iterate(string) } },
+                   { label: 'Regex', method: ->(string) { crunch_regex(string) } }
+                 ])
