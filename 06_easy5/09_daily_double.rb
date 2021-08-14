@@ -37,20 +37,20 @@ def crunch_regex(string)
   string.gsub(/(.)\1+/, '\1')
 end
 
-TEST_DATA = {
-  short1: { input: 'ddaaiillyy  ddoouubbllee', expected_output: 'daily double' },
-  short2: { input: '4444abcabccba', expected_output: '4abcabcba' },
-  short3: { input: 'ggggggggggggggg', expected_output: 'g' },
-  short4: { input: 'a', expected_output: 'a' },
-  short5: { input: '', expected_output: '' },
-  long1: { input: 'ddaaiillyy ddoouubbllee ' * 500, expected_output: 'daily double ' * 500 }
-}.freeze
+TESTS = [
+  { label: 'short1', input: 'ddaaiillyy  ddoouubbllee', expected_output: 'daily double' },
+  { label: 'short2',  input: '4444abcabccba', expected_output: '4abcabcba' },
+  { label: 'short3',  input: 'ggggggggggggggg', expected_output: 'g' },
+  { label: 'short4',  input: 'a', expected_output: 'a' },
+  { label: 'short5',  input: '', expected_output: '' },
+  { label: 'long1',   input: ('ddaaiillyy ddoouubbllee ' * 500), expected_output: ('daily double ' * 500) }
+].freeze
 
-TEST_DATA.each do |name, data|
-  puts "#{name}: #{crunch_regex(data[:input]) == data[:expected_output]}"
+TESTS.each do |test|
+  puts "#{test[:label]}: #{crunch_regex(test[:input]) == test[:expected_output]}"
 end
 
-benchmark_report(5, 500, TEST_DATA,
+benchmark_report(5, 500, TESTS,
                  [
                    { label: 'Iteration', method: ->(string) { crunch_iterate(string) } },
                    { label: 'Regex', method: ->(string) { crunch_regex(string) } }
