@@ -42,9 +42,11 @@ p dms(93.034773) == %(93°02'05")
 p dms(0) == %(0°00'00")
 p dms(360) == %(0°00'00")
 
+# Test results with SECONDS_PRECISION = 4
 p dms(30, round: false) == %(30°00'00.0000")
 p dms(76.73, round: false) == %(76°43'48.0000")
 p dms(254.6, round: false) == %(254°36'00.0000")
 p dms(93.034773, round: false) == %(93°02'05.1828")
+p dms(127.99999999, round: false) == %(128°00'00.0000")
 p dms(0, round: false) == %(0°00'00.0000")
 p dms(360, round: false) == %(0°00'00.0000")
