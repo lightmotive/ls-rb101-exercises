@@ -51,3 +51,9 @@ p dms(127.99999999, round: false) == %(128°00'00.0000")
 p dms(127.9999999, round: false) == %(127°59'59.9964")
 p dms(0, round: false) == %(0°00'00.0000")
 p dms(360, round: false) == %(0°00'00.0000")
+
+# Further exploration: how about values outside the range of 0..360?
+p dms(400) == %(40°00'00")
+p dms(-40) == %(320°00'00")
+p dms(-420) == %(300°00'00")
+# Those tests pass without code changes thanks to useful modular math :-)
