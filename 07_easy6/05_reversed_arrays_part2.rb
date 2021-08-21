@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 def reverse(array)
-  reversed = []
-
-  array.reverse_each { |element| reversed << element }
-
-  reversed
+  array.reverse_each.inject([]) { |reversed, element| reversed << element }
 end
 
 p reverse([1, 2, 3, 4]) == [4, 3, 2, 1] # => true
