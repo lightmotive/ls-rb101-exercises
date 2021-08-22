@@ -51,28 +51,40 @@ end
 
 run_tests(TESTS, ->(input) { find_dup_by_each_with_index(input) })
 
-def find_dup_by_tally(array)
-  array.tally.select { |_, v| v == 2 }.keys[0]
-end
+# def find_dup_by_tally(array)
+#   array.tally.select { |_, v| v == 2 }.keys[0]
+# end
 
-run_tests(TESTS, ->(input) { find_dup_by_tally(input) })
+# run_tests(TESTS, ->(input) { find_dup_by_tally(input) })
 
-def find_dup_by_neighboring_index(array)
-  array.sort!.find { |element| element == array[array.index(element) + 1] }
-end
+# def find_dup_by_neighboring_index(array)
+#   array.sort!.find { |element| element == array[array.index(element) + 1] }
+# end
 
-run_tests(TESTS, ->(input) { find_dup_by_neighboring_index(input) })
+# run_tests(TESTS, ->(input) { find_dup_by_neighboring_index(input) })
 
-def find_dup_by_index(arr)
-  arr.each do |element|
-    return element if arr.rindex(element) != arr.index(element)
-  end
-end
+# def find_dup_by_count(arr)
+#   arr.find { |element| arr.count(element) == 2 }
+# end
 
-run_tests(TESTS, ->(input) { find_dup_by_index(input) })
+# run_tests(TESTS, ->(input) { find_dup_by_count(input) })
 
-def find_dup_by_count(arr)
-  arr.find { |element| arr.count(element) == 2 }
-end
+# def find_dup_by_index(arr)
+#   arr.each do |element|
+#     return element if arr.rindex(element) != arr.index(element)
+#   end
+# end
 
-run_tests(TESTS, ->(input) { find_dup_by_count(input) })
+# run_tests(TESTS, ->(input) { find_dup_by_index(input) })
+
+benchmark_report(2, 2, TESTS,
+                 [
+                   { label: 'Iteration', method: ->(input) { find_dup_by_iteration(input) } },
+                   { label: 'Each with Index', method: ->(input) { find_dup_by_each_with_index(input) } }
+                   # The following solutions were significantly slower with initial benchmarks; ordered by performance:
+                   #  ,
+                   #  { label: 'Tally', method: ->(input) { find_dup_by_tally(input) } },
+                   #  { label: 'Neighboring Index', method: ->(input) { find_dup_by_neighboring_index(input) } },
+                   #  { label: 'Count', method: ->(input) { find_dup_by_count(input) } },
+                   #  { label: 'Index', method: ->(input) { find_dup_by_index(input) } }
+                 ])
