@@ -17,6 +17,7 @@
 # RETURN deduplicated_string
 
 require_relative '../../ruby-common/benchmark_report'
+require_relative '../../ruby-common/test'
 
 def crunch_iterate(string)
   last_char = nil
@@ -46,9 +47,8 @@ TESTS = [
   { label: 'long1',   input: ('ddaaiillyy ddoouubbllee ' * 500), expected_output: ('daily double ' * 500) }
 ].freeze
 
-TESTS.each do |test|
-  puts "#{test[:label]}: #{crunch_regex(test[:input]) == test[:expected_output]}"
-end
+run_tests(TESTS, ->(input) { crunch_iterate(input) })
+run_tests(TESTS, ->(input) { crunch_regex(input) })
 
 benchmark_report(5, 500, TESTS,
                  [

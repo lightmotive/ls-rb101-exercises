@@ -4,6 +4,7 @@
 # Basic logic: sort array, then iterate and return when current == previous.
 
 require_relative '../../ruby-common/benchmark_report'
+require_relative '../../ruby-common/test'
 
 def test_random_array_with_duplicate(element_count)
   array = []
