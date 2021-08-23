@@ -10,7 +10,7 @@ TESTS = [
   { label: 'three arrays with shorter tail', input: [[1, 2, 3], %w[a b c], %i[x y]],
     expected_output: [1, 'a', :x, 2, 'b', :y, 3, 'c', nil] },
   { label: 'three arrays with shorter head', input: [[1, 2], %w[a b c], %i[x y z]],
-    expected_output: [1, 'a', 2, 'b', 3, 'c'] }
+    expected_output: [1, 'a', :x, 2, 'b', :y] }
 ].freeze
 
 def interleave(*arrays)
