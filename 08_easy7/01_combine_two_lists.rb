@@ -25,3 +25,9 @@ def interleave(*arrays)
 end
 
 run_tests(TESTS, ->(input) { interleave(*input) })
+
+def interleave_with_zip(*arrays)
+  arrays[0].zip(*arrays[1, arrays.size - 1]).flatten
+end
+
+run_tests(TESTS, ->(input) { interleave_with_zip(*input) })
