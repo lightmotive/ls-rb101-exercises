@@ -52,32 +52,32 @@ def find_dup_by_iteration(array)
   nil
 end
 
-run_tests(TESTS, ->(input) { find_dup_by_iteration(input) })
+run_tests('find_dup_by_iteration', TESTS, ->(input) { find_dup_by_iteration(input) })
 
 def find_dup_by_each_with_index(arr)
   sorted = arr.sort
   sorted.each_with_index { |v, i| return v if v == sorted[i - 1] }
 end
 
-run_tests(TESTS, ->(input) { find_dup_by_each_with_index(input) })
+run_tests('find_dup_by_each_with_index', TESTS, ->(input) { find_dup_by_each_with_index(input) })
 
 # def find_dup_by_tally(array)
 #   array.tally.select { |_, v| v == 2 }.keys[0]
 # end
 
-# run_tests(TESTS, ->(input) { find_dup_by_tally(input) })
+# run_tests("find_dup_by_tally", TESTS, ->(input) { find_dup_by_tally(input) })
 
 # def find_dup_by_neighboring_index(array)
 #   array.sort!.find { |element| element == array[array.index(element) + 1] }
 # end
 
-# run_tests(TESTS, ->(input) { find_dup_by_neighboring_index(input) })
+# run_tests("find_dup_by_neighboring_index", TESTS, ->(input) { find_dup_by_neighboring_index(input) })
 
 # def find_dup_by_count(arr)
 #   arr.find { |element| arr.count(element) == 2 }
 # end
 
-# run_tests(TESTS, ->(input) { find_dup_by_count(input) })
+# run_tests("find_dup_by_count", TESTS, ->(input) { find_dup_by_count(input) })
 
 # def find_dup_by_index(arr)
 #   arr.each do |element|
@@ -85,7 +85,7 @@ run_tests(TESTS, ->(input) { find_dup_by_each_with_index(input) })
 #   end
 # end
 
-# run_tests(TESTS, ->(input) { find_dup_by_index(input) })
+# run_tests("find_dup_by_index", TESTS, ->(input) { find_dup_by_index(input) })
 
 benchmark_report(2, 10, TESTS,
                  [

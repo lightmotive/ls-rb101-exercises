@@ -47,8 +47,8 @@ TESTS = [
   { label: 'long1',   input: ('ddaaiillyy ddoouubbllee ' * 500), expected_output: ('daily double ' * 500) }
 ].freeze
 
-run_tests(TESTS, ->(input) { crunch_iterate(input) })
-run_tests(TESTS, ->(input) { crunch_regex(input) })
+run_tests('crunch_iterate', TESTS, ->(input) { crunch_iterate(input) })
+run_tests('crunch_regex', TESTS, ->(input) { crunch_regex(input) })
 
 benchmark_report(5, 500, TESTS,
                  [

@@ -24,10 +24,10 @@ def interleave(*arrays)
   interleaved
 end
 
-run_tests(TESTS, ->(input) { interleave(*input) })
+run_tests('interleave', TESTS, ->(input) { interleave(*input) })
 
 def interleave_with_zip(*arrays)
   arrays[0].zip(*arrays[1, arrays.size - 1]).flatten
 end
 
-run_tests(TESTS, ->(input) { interleave_with_zip(*input) })
+run_tests('interleave_with_zip', TESTS, ->(input) { interleave_with_zip(*input) })
