@@ -3,7 +3,7 @@
 def staggered_case(string, start_upcase: true)
   upcase = !start_upcase
   string.chars.map do |char|
-    next char if char =~ /[^a-zA-Z]/
+    next char if char =~ /[^a-z]/i
 
     upcase = !upcase
     upcase ? char.upcase : char.downcase
