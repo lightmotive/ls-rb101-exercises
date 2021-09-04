@@ -11,7 +11,9 @@ def sum_of_sums(array)
 
   sum_total
 
-  # Another solution that I would expect to be less efficient computationally:
+  # Another solution that I would expect to be computationally less efficient because it has to iterate/reference the
+  # array multiple times (vs a single iteration) and perform duplicate add operations.
+  #
   # sum_total = 0
   # array.size.times do |idx|
   #   sum_total += array[0..idx].inject(:+)
