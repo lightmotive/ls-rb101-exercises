@@ -38,14 +38,17 @@ p(substrings('abcde') == %w[
 ])
 
 puts 'Exercise 5:'
-def palindrome?(string)
+IGNORE_OPTIONS_DEFAULT = { case: false, non_alphanumeric: false }.freeze
+def palindrome?(string, ignore_options = IGNORE_OPTIONS_DEFAULT)
+  string = string.downcase if ignore_options[:case]
+  string = string.gsub(/[^a-z]/i, '') if ignore_options[:non_alphanumeric]
   return false if string.length <= 1
 
   string == string.reverse
 end
 
-def palindromes(string)
-  substrings(string).select { |substring| palindrome?(substring) }
+def palindromes(string, ignore_options: IGNORE_OPTIONS_DEFAULT)
+  substrings(string).select { |substring| palindrome?(substring, ignore_options) }
 end
 
 p palindromes('abcd') == []
@@ -59,3 +62,9 @@ p palindromes('hello-madam-did-madam-goodbye') == [
 p palindromes('knitting cassettes') == %w[
   nittin itti tt ss settes ette tt
 ]
+
+puts 'Exercise 5 - Further Exploration:'
+p palindromes('MadAm', ignore_options: { case: true }) == %w[MadAm adA]
+p palindromes('Mad-Am', ignore_options: { non_alphanumeric: true }) == []
+p palindromes('mad-am', ignore_options: { non_alphanumeric: true }) == %w[mad-am ad-a]
+p palindromes('Mad-Am', ignore_options: { case: true, non_alphanumeric: true }) == %w[Mad-Am ad-A]
