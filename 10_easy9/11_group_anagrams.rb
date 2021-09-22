@@ -14,7 +14,7 @@ end
 
 def anagrams(words)
   words.each_with_object(Hash.new { |h, k| h[k] = [] }) do |word, map|
-    key = string_sort(word).to_s
+    key = string_sort(word).to_sym
     map[key] << word
   end
 end
