@@ -19,11 +19,11 @@ def anagrams(words)
   end
 end
 
-def anagrams_print(anagrams)
-  anagrams.each_value { |list| p list }
+def print_hash_values(hash)
+  hash.each_value { |list| p list }
 end
 
-anagrams_print(
+print_hash_values(
   anagrams(%w[demo none tied evil dome mode live
               fowl veil wolf diet vile edit tide
               flow neon])
