@@ -10,9 +10,10 @@ p rotate_array(['a']) == ['a']
 
 x = [1, 2, 3, 4]
 p rotate_array(x) == [2, 3, 4, 1] # => true
-x == [1, 2, 3, 4]                 # => true
+p x == [1, 2, 3, 4] # => true
 
 # Further exploration
+puts '**Further Exploration (Part 1)**'
 
 def rotate_string(string)
   rotate_array(string.chars).join
@@ -25,3 +26,20 @@ def rotate_integer(int)
 end
 
 p rotate_integer(12_345) == 23_451
+
+# Rotation (Part 2)
+puts '**Part 2**'
+
+def rotate_rightmost_digits(number, count)
+  digits = number.to_s.chars
+  rotate_range = -count..-1
+  digits[rotate_range] = rotate_array(digits[rotate_range])
+  digits.join.to_i
+end
+
+p rotate_rightmost_digits(735_291, 1) == 735_291
+p rotate_rightmost_digits(735_291, 2) == 735_219
+p rotate_rightmost_digits(735_291, 3) == 735_912
+p rotate_rightmost_digits(735_291, 4) == 732_915
+p rotate_rightmost_digits(735_291, 5) == 752_913
+p rotate_rightmost_digits(735_291, 6) == 352_917
