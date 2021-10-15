@@ -46,11 +46,11 @@ def lights_toggle!(lights, numbers)
   numbers.each { |number| lights[number] = !lights[number] }
 end
 
-def lights_toggle_with_increasing_step!(lights)
-  rounds = lights.size
+def numbers_with_increasing_step(rounds)
   1.upto(rounds) do |round|
     numbers_to_toggle = (round..rounds).step(round).to_a
-    lights_toggle!(lights, numbers_to_toggle)
+
+    yield(numbers_to_toggle)
   end
 end
 
@@ -58,15 +58,19 @@ def lights_on(lights)
   lights.select { |_, on| on }.keys
 end
 
-def lights_on_test(light_count)
-  lights = lights_create(light_count)
-  lights_toggle_with_increasing_step!(lights)
+def toggle_lights!(lights)
+  numbers_with_increasing_step(lights.size) do |numbers|
+    lights_toggle!(lights, numbers)
+  end
   lights_on(lights)
 end
 
-p lights_on_test(5) == [1, 4]
-p lights_on_test(10) == [1, 4, 9]
-p lights_on_test(1000) == [
+def toggle_lights_test(light_count)
+  lights = lights_create(light_count)
+  toggle_lights!(lights)
+end
+
+p toggle_lights_test(1000) == [
   1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324,
   361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961
 ]
