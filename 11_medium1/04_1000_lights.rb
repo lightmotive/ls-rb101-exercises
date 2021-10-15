@@ -37,24 +37,25 @@
 # P5: Implementation
 
 def lights_create(count, initial_state_on: false)
-  (1..count).to_a.map { |number| { number: number, on: initial_state_on } }
+  (1..count).each_with_object({}) do |number, lights|
+    lights[number] = initial_state_on
+  end
 end
 
-def lights_toggle!(lights)
-  lights.each { |light| light[:on] = !light[:on] }
+def lights_toggle!(lights, numbers)
+  numbers.each { |number| lights[number] = !lights[number] }
 end
 
 def lights_toggle_with_increasing_step!(lights)
-  round_count = lights.size
-  round_count.times do |idx|
-    indices_to_toggle = (idx..round_count - 1).step(idx + 1).to_a
-
-    lights_toggle!(lights.values_at(*indices_to_toggle))
+  rounds = lights.size
+  1.upto(rounds) do |round|
+    numbers_to_toggle = (round..rounds).step(round).to_a
+    lights_toggle!(lights, numbers_to_toggle)
   end
 end
 
 def lights_on(lights)
-  lights.select { |light| light[:on] }.map { |light| light[:number] }
+  lights.select { |_, on| on }.keys
 end
 
 def lights_on_test(light_count)
