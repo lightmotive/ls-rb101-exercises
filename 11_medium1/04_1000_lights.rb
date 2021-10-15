@@ -10,7 +10,7 @@
 #
 # Mental model:
 # - Create an array of n lights that are initially off, then pass through n
-#   times toggling each light on/off. From the beginning, skip the number of
+#   times toggling each light on/off. From the beginning, step the number of
 #   lights equal to [pass number] - 1.
 
 # P2: Examples/Test Cases
@@ -28,7 +28,7 @@
 
 # P4: Algorithm
 # * Overview *
-# 1. Build lights array.
+# 1. Create lights array.
 # 2. Iterate through array n times.
 #   - Skip (round n) - 1 lights.
 #   - Toggle light's :on value (boolean).
@@ -36,15 +36,36 @@
 
 # P5: Implementation
 
-def build_lights(count, initial_state_on: false)
+def lights_create(count, initial_state_on: false)
   (1..count).to_a.map { |number| { number: number, on: initial_state_on } }
 end
 
-def toggle_lights(lights, rounds)
-  # - Skip (round n) - 1 lights.
-  # - Toggle light's :on value (boolean).
-  # - Return array of light numbers that are on.
+def lights_toggle!(lights)
+  lights.each { |light| light[:on] = !light[:on] }
 end
 
-p toggle_lights(build_lights(5), 5) == [1, 4]
-p toggle_lights(build_lights(10), 10) == [1, 4, 9]
+def lights_toggle_with_increasing_step!(lights)
+  round_count = lights.size
+  round_count.times do |idx|
+    indices_to_toggle = (idx..round_count - 1).step(idx + 1).to_a
+
+    lights_toggle!(lights.values_at(*indices_to_toggle))
+  end
+end
+
+def lights_on(lights)
+  lights.select { |light| light[:on] }.map { |light| light[:number] }
+end
+
+def lights_on_test(light_count)
+  lights = lights_create(light_count)
+  lights_toggle_with_increasing_step!(lights)
+  lights_on(lights)
+end
+
+p lights_on_test(5) == [1, 4]
+p lights_on_test(10) == [1, 4, 9]
+p lights_on_test(1000) == [
+  1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324,
+  361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961
+]
