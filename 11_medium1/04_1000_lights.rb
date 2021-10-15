@@ -36,12 +36,10 @@
 
 # P5: Implementation
 
-# 1. Build lights array.
 def build_lights(count, initial_state_on: false)
-  # [{number: 1, on: false}, ...]
+  (1..count).to_a.map { |number| { number: number, on: initial_state_on } }
 end
 
-# 2. Iterate through array n times.
 def toggle_lights(lights, rounds)
   # - Skip (round n) - 1 lights.
   # - Toggle light's :on value (boolean).
