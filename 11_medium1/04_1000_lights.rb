@@ -62,12 +62,12 @@ def toggle_lights!(lights)
   numbers_with_increasing_step(lights.size) do |numbers|
     lights_toggle!(lights, numbers)
   end
-  lights_on(lights)
 end
 
 def toggle_lights_test(light_count)
   lights = lights_create(light_count)
   toggle_lights!(lights)
+  lights_on(lights)
 end
 
 p toggle_lights_test(1000) == [
