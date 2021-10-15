@@ -32,6 +32,21 @@
 # 2. Iterate through array n times.
 #   - Skip (round n) - 1 lights.
 #   - Toggle light's :on value (boolean).
-# 3. Return light numbers that are on.
+#   - Return array of light numbers that are on.
 
 # P5: Implementation
+
+# 1. Build lights array.
+def build_lights(count, initial_state_on: false)
+  # [{number: 1, on: false}, ...]
+end
+
+# 2. Iterate through array n times.
+def toggle_lights(lights, rounds)
+  # - Skip (round n) - 1 lights.
+  # - Toggle light's :on value (boolean).
+  # - Return array of light numbers that are on.
+end
+
+p toggle_lights(build_lights(5), 5) == [1, 4]
+p toggle_lights(build_lights(10), 10) == [1, 4, 9]
