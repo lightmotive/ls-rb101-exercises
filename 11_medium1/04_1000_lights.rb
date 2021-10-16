@@ -47,7 +47,7 @@ def lights_toggle!(lights, numbers)
 end
 
 # Generate (1..rounds) in rounds with a step that equals the current round.
-def numbers_in_rounds_with_round_step(rounds)
+def numbers_rounds_step_increase(rounds)
   1.upto(rounds) do |round|
     numbers = (round..rounds).step(round).to_a
     yield(numbers)
@@ -59,7 +59,7 @@ def lights_on(lights)
 end
 
 def toggle_lights!(lights)
-  numbers_in_rounds_with_round_step(lights.size) do |numbers|
+  numbers_rounds_step_increase(lights.size) do |numbers|
     lights_toggle!(lights, numbers)
   end
 end
