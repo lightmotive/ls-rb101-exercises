@@ -49,7 +49,7 @@ end
 # Iterate through rounds and step from round to rounds, yielding each number.
 def numbers_rounds_step_increase(rounds, &block)
   1.upto(rounds) do |round|
-    round.step(by: round, to: rounds).each(&block)
+    (round..rounds).step(round).each(&block)
   end
 end
 
