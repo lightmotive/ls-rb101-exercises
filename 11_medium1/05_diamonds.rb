@@ -19,7 +19,7 @@ end
 def diamond_strings(width, outline: false)
   strings = []
 
-  1.step(by: 2, to: width) do |count|
+  (1..width).step(2) do |count|
     strings.push(diamond_string(width, count, outline: outline))
   end
 
