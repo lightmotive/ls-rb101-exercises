@@ -17,10 +17,8 @@ def diamond_string(width, count, outline: false)
 end
 
 def diamond_strings(width, outline: false)
-  strings = []
-
-  (1..width).step(2) do |count|
-    strings.push(diamond_string(width, count, outline: outline))
+  strings = (1..width).step(2).each_with_object([]) do |count, arr|
+    arr.push(diamond_string(width, count, outline: outline))
   end
 
   strings_before_middle = strings[0..-2]
