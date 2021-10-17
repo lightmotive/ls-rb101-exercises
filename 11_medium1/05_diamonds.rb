@@ -8,22 +8,19 @@
 # - Copy the first half of the diamond minus the last row, reverse, and append.
 
 def diamond_string(width, count, outline: false)
-  asterisks =
-    if count == 1 then '*'
-    elsif outline then "*#{' ' * (count - 2)}*"
-    else '*' * count
-    end
+  asterisks = if count == 1 then '*'
+              elsif outline then "*#{' ' * (count - 2)}*"
+              else '*' * count
+              end
 
   asterisks.center(width, ' ')
 end
 
 def diamond_strings(width, outline: false)
   strings = []
-  count = 1
 
-  while count <= width
+  1.step(by: 2, to: width) do |count|
     strings.push(diamond_string(width, count, outline: outline))
-    count += 2
   end
 
   strings.concat(strings[0..-2].reverse)
