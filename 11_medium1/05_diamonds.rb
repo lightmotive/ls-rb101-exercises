@@ -23,7 +23,8 @@ def diamond_strings(width, outline: false)
     strings.push(diamond_string(width, count, outline: outline))
   end
 
-  strings.concat(strings[0..-2].reverse)
+  strings_before_middle = strings[0..-2]
+  strings.concat(strings_before_middle.reverse)
 end
 
 def diamond_display(width, outline: false)
