@@ -42,15 +42,14 @@ def lights_create(count, initial_state_on: false)
   end
 end
 
-def lights_toggle!(lights, numbers)
-  numbers.each { |number| lights[number] = !lights[number] }
+def light_toggle!(lights, number)
+  lights[number] = !lights[number]
 end
 
-# Generate (1..rounds) in rounds with a step that equals the current round.
-def numbers_rounds_step_increase(rounds)
+# Iterate through rounds and step from round to rounds, yielding each number.
+def numbers_rounds_step_increase(rounds, &block)
   1.upto(rounds) do |round|
-    numbers = (round..rounds).step(round).to_a
-    yield(numbers)
+    round.step(by: round, to: rounds).each(&block)
   end
 end
 
@@ -59,8 +58,8 @@ def lights_on(lights)
 end
 
 def toggle_lights!(lights)
-  numbers_rounds_step_increase(lights.size) do |numbers|
-    lights_toggle!(lights, numbers)
+  numbers_rounds_step_increase(lights.size) do |number|
+    light_toggle!(lights, number)
   end
 end
 
