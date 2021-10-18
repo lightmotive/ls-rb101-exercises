@@ -27,6 +27,7 @@ def consolidate_digits(string)
 end
 
 p consolidate_digits('A 5   6  7 d') == 'A 567 d'
+p consolidate_digits(' 31   6  72 ') == ' 31672 '
 
 @mock_locale_library = {
   # A real-world locale library would be much more robust; there's probably a
