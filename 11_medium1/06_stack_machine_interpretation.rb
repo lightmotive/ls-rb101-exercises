@@ -18,11 +18,13 @@ def stack_operate!(state, operation)
   state[:register] = state[:register].send(operation, state[:stack].pop)
 end
 
+@print_to_stdout = true
+
 COMMANDS = {
   PRINT: lambda do |state|
            output = state[:register].to_s
            state[:stdout_log].push(output)
-           puts output
+           puts output if @print_to_stdout
          end,
   PUSH: ->(state) { state[:stack].push(state[:register]) },
   POP: ->(state) { state[:register] = state[:stack].pop },
@@ -50,6 +52,8 @@ def minilang(command_string)
   state
 end
 
+@print_to_stdout = false
+
 p minilang('PRINT')[:stdout_log] == ['0']
 p minilang('5 PUSH 3 MULT PRINT')[:stdout_log] == ['15']
 p minilang('5 PRINT PUSH 3 PRINT ADD PRINT')[:stdout_log] == %w[5 3 8]
@@ -60,3 +64,11 @@ p minilang('3 PUSH PUSH 7 DIV MULT PRINT ')[:stdout_log] == ['6']
 p minilang('4 PUSH PUSH 7 MOD MULT PRINT ')[:stdout_log] == ['12']
 p minilang('-3 PUSH 5 SUB PRINT')[:stdout_log] == ['8']
 p minilang('6 PUSH')[:stdout_log] == []
+
+# Further exploration 1:
+# - Try writing a minilang program to evaluate and print the result of this
+#   expression: (3 + (4 * 5) - 7) / (5 % 3)
+p minilang('3 PUSH 5 MOD PUSH 7 PUSH 4 PUSH 5 MULT PUSH 3 ' \
+  'ADD SUB DIV PRINT')[:stdout_log] == ['8']
+# That's easier when one considers math order of operations. You have to work
+# backwards: calculate the values, push them, then calculate the stacked values.
