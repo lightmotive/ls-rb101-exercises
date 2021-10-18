@@ -14,7 +14,26 @@
 #   - If command is not found in hash, it must be an integer.
 # - Perform operations sequentially
 
+require 'pp'
+
+def raise_custom_error(error_class, message, state)
+  message.concat("\n--State--\n#{state.pretty_inspect}")
+  raise error_class, message
+end
+
+def validate_pop(state, detail: String.new)
+  if state[:stack].size.zero?
+    detail = String.new(" #{detail}") unless detail.empty?
+    raise_custom_error(
+      StandardError, "The stack was empty.#{detail}", state
+    )
+  end
+
+  nil
+end
+
 def stack_operate!(state, operation)
+  validate_pop(state, detail: "Operation: #{operation}")
   state[:register] = state[:register].send(operation, state[:stack].pop)
 end
 
@@ -27,26 +46,51 @@ COMMANDS = {
            puts output if @print_to_stdout
          end,
   PUSH: ->(state) { state[:stack].push(state[:register]) },
-  POP: ->(state) { state[:register] = state[:stack].pop },
+  POP: lambda do |state|
+    validate_pop(state)
+    state[:register] = state[:stack].pop
+  end,
   ADD: ->(state) { stack_operate!(state, :+) },
   SUB: ->(state) { stack_operate!(state, :-) },
   MULT: ->(state) { stack_operate!(state, :*) },
   DIV: ->(state) { stack_operate!(state, :/) },
   MOD: ->(state) { stack_operate!(state, :%) },
-  default: ->(state, command_string) { state[:register] = command_string.to_i }
+  default: lambda do |state, command_string|
+    state[:register] = Integer(command_string)
+  rescue ArgumentError
+    raise_custom_error(
+      ArgumentError, "#{command_string} is not a valid command.", state
+    )
+  end
   # Interpret integers (n) if command is not in the list above
 }.freeze
+
+def minilang_execute!(state, command_string, command)
+  return COMMANDS[:default].call(state, command_string) if command.nil?
+
+  command.call(state)
+
+  nil
+end
+
+def minilang_iterate!(state)
+  until state[:command_strings].empty?
+    command_string = state[:command_strings].shift
+    command = COMMANDS.fetch(command_string.to_sym, nil)
+    minilang_execute!(state, command_string, command)
+  end
+
+  nil
+end
 
 def minilang(command_string)
   state = { register: 0, stack: [], command_strings: command_string.split,
             stdout_log: [] }
 
-  until state[:command_strings].empty?
-    command_string = state[:command_strings].shift
-    command = COMMANDS.fetch(command_string.to_sym, nil)
-    next COMMANDS[:default].call(state, command_string) if command.nil?
-
-    command.call(state)
+  begin
+    minilang_iterate!(state)
+  rescue StandardError => e
+    return e
   end
 
   state
@@ -72,3 +116,33 @@ p minilang('3 PUSH 5 MOD PUSH 7 PUSH 4 PUSH 5 MULT PUSH 3 ' \
   'ADD SUB DIV PRINT')[:stdout_log] == ['8']
 # That's easier when one considers math order of operations. You have to work
 # backwards: calculate the values, push them, then calculate the stacked values.
+
+# ***
+
+# Further exploration 2:
+# - Add error handling.
+# - Detect when program returns an error, displaying the error message.
+
+result = minilang('6 PUSH POP POP')
+p result.is_a?(StandardError)
+p result.message == <<~MSG
+  The stack was empty.
+  --State--
+  {:register=>6, :stack=>[], :command_strings=>[], :stdout_log=>[]}
+MSG
+
+result = minilang('6 PUSH ADD ADD')
+p result.is_a?(StandardError)
+p result.message == <<~MSG
+  The stack was empty. Operation: +
+  --State--
+  {:register=>12, :stack=>[], :command_strings=>[], :stdout_log=>[]}
+MSG
+
+result = minilang('-3 PUSH 5 SUBTRACT PRINT')
+p result.is_a?(ArgumentError)
+p result.message == <<~MSG
+  SUBTRACT is not a valid command.
+  --State--
+  {:register=>5, :stack=>[-3], :command_strings=>["PRINT"], :stdout_log=>[]}
+MSG
