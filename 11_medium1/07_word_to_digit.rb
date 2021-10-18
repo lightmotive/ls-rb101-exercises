@@ -28,21 +28,28 @@ end
 
 p remove_consecutive_number_whitespace('A 5   6  7 d') == 'A 567 d'
 
-def format_phone_string(string, locale: 'en-US')
-  # A real-world formatter would be much more robust--and there's probably a
+@mock_locale_library = {
+  # A real-world locale library would be much more robust; there's probably a
   # Gem or other library to handle this.
-  case locale
-  when 'en-US' then "(#{string[0..2]}) #{string[3..5]}-#{string[6..-1]}"
-  end
+  'en-US': {
+    phone_number_pattern: /\b\d{10}\b/,
+    phone_number_format: ->(string) { "(#{string[0..2]}) #{string[3..5]}-#{string[6..-1]}" }
+  }
+}
+
+def format_phone_string(string, locale: 'en-US')
+  @mock_locale_library[locale.to_sym][:phone_number_format].call(string)
 end
 
-def words_to_phone_number(string)
+def words_to_phone_number(string, locale: 'en-US')
   string = word_to_digit(string)
   string = remove_consecutive_number_whitespace(string)
 
   # As with format_phone_string, one would need to provide a locale to select
   # the appropriate phone number pattern here:
-  string.gsub(/\d{9}/) { |phone_string| format_phone_string(phone_string) }
+  string.gsub(
+    @mock_locale_library[locale.to_sym][:phone_number_pattern]
+  ) { |phone_string| format_phone_string(phone_string, locale: locale) }
 end
 
 p words_to_phone_number(
