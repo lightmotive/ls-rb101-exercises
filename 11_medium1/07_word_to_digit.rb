@@ -22,11 +22,11 @@ p word_to_digit(
   'Please call me at five five five One two three FOUR. Thanks.'
 ) == 'Please call me at 5 5 5 1 2 3 4. Thanks.'
 
-def remove_consecutive_number_whitespace(string)
+def consolidate_digits(string)
   string.gsub(/\b(\d+[\s\d]*\d+)\b/) { |digits| digits.gsub(/\s/, '') }
 end
 
-p remove_consecutive_number_whitespace('A 5   6  7 d') == 'A 567 d'
+p consolidate_digits('A 5   6  7 d') == 'A 567 d'
 
 @mock_locale_library = {
   # A real-world locale library would be much more robust; there's probably a
@@ -43,7 +43,7 @@ end
 
 def words_to_phone_number(string, locale: 'en-US')
   string = word_to_digit(string)
-  string = remove_consecutive_number_whitespace(string)
+  string = consolidate_digits(string)
 
   # As with format_phone_string, one would need to provide a locale to select
   # the appropriate phone number pattern here:
