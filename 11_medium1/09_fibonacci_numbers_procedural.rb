@@ -7,15 +7,13 @@ def fibonacci(nth)
   return 0 if nth.zero?
   return 1 if nth < 3
 
-  numbers = [0, 1]
-  nth_number = nil
-  (2..nth).each do
-    nth_number = numbers[0] + numbers[1]
-    numbers[0] = numbers[1]
-    numbers[1] = nth_number
+  first = 0
+  last = 1
+  2.upto(nth) do
+    first, last = [last, first + last]
   end
 
-  nth_number
+  last
 end
 
 p fibonacci(1) == 1
