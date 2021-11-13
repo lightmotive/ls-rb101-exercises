@@ -55,6 +55,13 @@ def words(string)
   string.scan(/[\w-]+/m)
 end
 
+def longest_word(words)
+  return words.max_by(&:size) if words.is_a?(Array)
+  return longest_word(words(words)) if words.is_a?(String)
+
+  nil
+end
+
 def sentences(string)
   string.scan(/[^?.!]*[?.!]+/m).map(&:strip)
 end
@@ -63,12 +70,15 @@ def longest_sentence(string)
   sentences = sentences(string)
 
   longest_sentence = sentences.max_by { |sentence| words(sentence).size }
+  longest_sentence_words = words(longest_sentence)
 
-  { longest_sentence: longest_sentence,
-    word_count: words(longest_sentence).size }
+  { sentence: longest_sentence,
+    word_count: longest_sentence_words.size,
+    longest_word: longest_word(longest_sentence_words) }
 end
 
 p longest_sentence(File.read('01_longest_sentence.txt'))
+p longest_word(File.read('01_longest_sentence.txt'))
 
 # require 'net/http'
 # def web_content(url)
@@ -87,3 +97,4 @@ p longest_sentence(File.read('01_longest_sentence.txt'))
 # example.
 
 p longest_sentence(File.read('01_longest_sentence_pg84.txt'))
+p longest_word(File.read('01_longest_sentence_pg84.txt'))
