@@ -52,14 +52,11 @@
 # - Return Hash with sentence and word_count keys.
 
 def words(string)
-  string.split
+  string.scan(/[\w-]+/m)
 end
 
 def sentences(string)
-  delimiters = %w[? . !]
-  regexp_symbols = delimiters.map { |delimiter| "\\#{delimiter}\s" }
-  regexp_symbols.concat(delimiters.map { |delimiter| "\\#{delimiter}" })
-  string.split(/#{regexp_symbols.join("|")}/)
+  string.scan(/[^?.!]*[?.!]+/m).map(&:strip)
 end
 
 def longest_sentence(string)
