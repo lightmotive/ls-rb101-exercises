@@ -14,6 +14,10 @@
 # - Word delimiter: spaces
 #   - Word excludes sentence delimiters
 #
+# Questions:
+# - What if there are multiple sentences with the longest word count?
+#   - For this exercise, take the last longest sentence.
+#
 # * E *
 # - Load 01_longest_sentence.txt:
 #   - Print the last sentence.
@@ -42,7 +46,32 @@
 # - Get sentences(string)
 # - Loop through each sentence
 #   - Get words in sentence (`words` method) and save count and sentence
-#     to variables: longest_word_count and longest_sentence
-#     - If current word count is greater than longest_word_count, update those
+#     to variables: longest_sentence_word_count and longest_sentence
+#     - If current word count is greater than longest_sentence_word_count, update those
 #       variables.
 # - Return Hash with sentence and word_count keys.
+
+def words(string)
+  string.split(' ')
+end
+
+def sentences(string)
+  string.split(/\.|!|\?/)
+end
+
+def longest_sentence(string)
+  sentences = sentences(string)
+
+  longest_sentence = { sentence: nil, word_count: nil }
+
+  sentences.each do |sentence|
+    word_count = words(sentence).size
+    next unless longest_sentence[:word_count].nil? ||
+                word_count >= longest_sentence[:word_count]
+
+    longest_sentence[:sentence] = sentence
+    longest_sentence[:word_count] = word_count
+  end
+
+  longest_sentence
+end
