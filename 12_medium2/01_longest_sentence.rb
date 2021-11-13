@@ -52,7 +52,7 @@
 # - Return Hash with sentence and word_count keys.
 
 def words(string)
-  string.split(' ')
+  string.split
 end
 
 def sentences(string)
@@ -78,3 +78,23 @@ def longest_sentence(string)
 
   longest_sentence
 end
+
+p longest_sentence(File.read('01_longest_sentence.txt'))
+
+# require 'net/http'
+# def web_content(url)
+#   uri = URI(url)
+#   Net::HTTP.get_response(uri)
+# end
+
+# p longest_sentence(
+#   web_content('http://www.gutenberg.org/cache/epub/84/pg84.txt')
+# )
+# It appears the site is now redirecting requests, possibly due to
+# Launch School student overuse!
+#   Response: #<Net::HTTPFound 302 Found readbody=true>
+#
+# Therefore, we'll download and load it from a local file as with the first
+# example.
+
+p longest_sentence(File.read('01_longest_sentence_pg84.txt'))
