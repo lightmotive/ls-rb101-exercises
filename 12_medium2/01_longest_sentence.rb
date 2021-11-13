@@ -56,7 +56,10 @@ def words(string)
 end
 
 def sentences(string)
-  string.split(/\.|!|\?/)
+  delimiters = %w[? . !]
+  regexp_symbols = delimiters.map { |delimiter| "\\#{delimiter}\s" }
+  regexp_symbols.concat(delimiters.map { |delimiter| "\\#{delimiter}" })
+  string.split(/#{regexp_symbols.join("|")}/)
 end
 
 def longest_sentence(string)
