@@ -52,7 +52,7 @@
 # - Return Hash with sentence and word_count keys.
 
 def words(string)
-  string.scan(/[\w-]+/m)
+  string.scan(/\b\w+\b/m)
 end
 
 def longest_word(words)
