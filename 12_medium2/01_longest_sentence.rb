@@ -65,18 +65,10 @@ end
 def longest_sentence(string)
   sentences = sentences(string)
 
-  longest_sentence = { sentence: nil, word_count: nil }
+  longest_sentence = sentences.max_by { |sentence| words(sentence).size }
 
-  sentences.each do |sentence|
-    word_count = words(sentence).size
-    next unless longest_sentence[:word_count].nil? ||
-                word_count >= longest_sentence[:word_count]
-
-    longest_sentence[:sentence] = sentence
-    longest_sentence[:word_count] = word_count
-  end
-
-  longest_sentence
+  { longest_sentence: longest_sentence,
+    word_count: words(longest_sentence).size }
 end
 
 p longest_sentence(File.read('01_longest_sentence.txt'))
