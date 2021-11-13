@@ -1,0 +1,48 @@
+# frozen_string_literal: true
+
+# PEDAC
+# =====
+#
+# * P *
+# Input: text file content
+# Outputs:
+#   - String containing the longest sentence based on the number of words.
+#   - Number of words in that sentence.
+#
+# Rules:
+# - Sentence delimiter is %w[. ! ?]
+# - Word delimiter: spaces
+#   - Word excludes sentence delimiters
+#
+# * E *
+# - Load 01_longest_sentence.txt:
+#   - Print the last sentence.
+#   - Word count: 86
+# - Load http://www.gutenberg.org/cache/epub/84/pg84.txt
+#   - Longest sentence is ...
+#   - Word count: 157
+#
+# * D *
+# - sentences = Array (split the content by sentence delimiter)
+#   - words (within each sentence) = Array (split sentence string)
+#
+# * A *
+# words(string)
+# ------------------
+# - Split string by space.
+# - Return array of words.
+
+# sentences(string)
+# -----------------
+# - Use Regexp to split content string into sentences.
+# - Return array of sentences.
+
+# longest_sentence(string)
+# ------------------------
+# - Get sentences(string)
+# - Loop through each sentence
+#   - Get words in sentence (`words` method) and save count and sentence
+#     to variables: longest_word_count and longest_sentence
+#     - If current word count is greater than longest_word_count, update those
+#       variables.
+# - Return Hash with sentence and word_count keys.
