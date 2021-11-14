@@ -80,15 +80,7 @@ def longest_sentence(string)
 end
 
 def paragraphs(string)
-  regexp = case string
-           when /\r\n/ then /(?:.+(?:[\r\n]{0,2}))+(?=[\r\n]{4,}|$)/
-           else /(?:.+\n{0,1})+(?=\n{2,}|$)/
-           end
-
-  # regexp = /(?:.+\R{0,1})+(?=\R{2,}|$)/
-  # That works with `\n`, but doesn't work with `\r\n`. Investigate later.
-
-  string.scan(regexp).map(&:strip)
+  string.split(/\R{2,}/)
 end
 
 def longest_paragraph(string)
