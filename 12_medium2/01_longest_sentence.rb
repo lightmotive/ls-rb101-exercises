@@ -51,6 +51,8 @@
 #       variables.
 # - Return Hash with sentence and word_count keys.
 
+require 'pp'
+
 def words(string)
   string.scan(/\b\w+\b/m)
 end
@@ -77,8 +79,41 @@ def longest_sentence(string)
     longest_word: longest_word(longest_sentence_words) }
 end
 
-p longest_sentence(File.read('01_longest_sentence.txt'))
-p longest_word(File.read('01_longest_sentence.txt'))
+def paragraphs(string)
+  regexp = case string
+           when /\r\n/ then /(?:.+(?:[\r\n]{0,2}))+(?=[\r\n]{4,}|$)/
+           else /(?:.+\n{0,1})+(?=\n{2,}|$)/
+           end
+
+  # regexp = /(?:.+\R{0,1})+(?=\R{2,}|$)/
+  # That works with `\n`, but doesn't work with `\r\n`. Investigate later.
+
+  string.scan(regexp).map(&:strip)
+end
+
+def longest_paragraph(string)
+  paragraphs = paragraphs(string)
+
+  longest_paragraph = paragraphs.max_by { |paragraph| words(paragraph).size }
+  longest_paragraph_words = words(longest_paragraph)
+
+  { paragraph: longest_paragraph,
+    sentence_count: sentences(longest_paragraph).size,
+    longest_sentence: longest_sentence(longest_paragraph),
+    word_count: longest_paragraph_words.size,
+    longest_word: longest_word(longest_paragraph_words) }
+end
+
+sample_text1 = File.read('01_longest_sentence.txt')
+
+puts '* Longest Paragraph, Sample Text 1 *'
+pp longest_paragraph(sample_text1)
+
+puts "\n* Longest Sentence, Sample Text 1 *"
+pp longest_sentence(sample_text1)
+
+puts "\n* Longest Word, Sample Text 1 *"
+pp longest_word(sample_text1)
 
 # require 'net/http'
 # def web_content(url)
@@ -96,5 +131,13 @@ p longest_word(File.read('01_longest_sentence.txt'))
 # Therefore, we'll download and load it from a local file as with the first
 # example.
 
-p longest_sentence(File.read('01_longest_sentence_pg84.txt'))
-p longest_word(File.read('01_longest_sentence_pg84.txt'))
+sample_text2 = File.read('01_longest_sentence_pg84.txt')
+
+puts "\n* Longest Paragraph, Sample Text 2 *"
+pp longest_paragraph(sample_text2)
+
+puts "\n* Longest Sentence, Sample Text 2 *"
+pp longest_sentence(sample_text2)
+
+puts "\n* Longest Word, Sample Text 2 *"
+pp longest_word(sample_text2)
