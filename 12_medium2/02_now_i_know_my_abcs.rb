@@ -38,7 +38,9 @@
 #     - If no, stop iterating by returning false.
 #     - If iteration completes without returning false, return true.
 
-DEFAULT_LETTER_SETS = %w[B:O X:K D:Q C:P N:A G:T R:E F:S J:W H:U V:I L:Y Z:M]
+DEFAULT_LETTER_SETS = %w[B:O X:K D:Q C:P N:A
+                         G:T R:E F:S J:W H:U
+                         V:I L:Y Z:M].freeze
 
 def blocks_create(letter_sets)
   letter_sets.map do |letter_set|
@@ -75,3 +77,16 @@ end
 p block_word?('BATCH') == true
 p block_word?('BUTCH') == false
 p block_word?('jest') == true
+
+# I realize that I anticipated potential features, which resulted in a more
+# complex solution. Those features include:
+# - Customizable blocks (any number of sides)
+# - Possible duplicate blocks (feature not implemented, but would be possible
+#   with minimal effort).
+
+# The problem, I also realize, is that I should not implement features that
+# haven't been requested yet. It can lead to excessive implementation times
+# while stakeholders wait for what's needed now!
+
+# Sometimes, though, thinking ahead can pay off...the trick is finding the
+# right opportunities and balancing present needs with future preparation.
