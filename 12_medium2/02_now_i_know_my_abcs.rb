@@ -38,14 +38,28 @@
 #     - If no, stop iterating by returning false.
 #     - If iteration completes without returning false, return true.
 
-def block(letter, blocks)
+DEFAULT_LETTER_SETS = %w[B:O X:K D:Q C:P N:A G:T R:E F:S J:W H:U V:I L:Y Z:M]
 
+def blocks_create(letter_sets)
+  # Create hash from letter_sets using this sample structure:
+  # { 'B:O': { letters: %w[B O], used: false }, ... }
+end
+
+def block(letter, blocks)
+  # Select and return the block from blocks by letter
 end
 
 def use_block(letter, block)
-
+  # Mark the block's :used value to true
 end
 
-def block_word?(word)
-
+def block_word?(word, blocks = nil)
+  # Given a word and a set of blocks (default blocks if not specified):
+  blocks = blocks_create(DEFAULT_LETTER_SETS) if blocks.nil?
+  
+  # - Loop through each character
+  #   - Check whether the character exists in a set of blocks where not used.
+  #     - If yes, mark the block as used and continue.
+  #     - If no, stop iterating by returning false.
+  #     - If iteration completes without returning false, return true.
 end
