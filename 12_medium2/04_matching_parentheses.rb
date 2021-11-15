@@ -10,6 +10,8 @@
 
 # More advanced logic: check for balance with multiple open-close pairs
 # - Return false if one set closes while any other set is open.
+#   - Track whether any other set opens while a different set is open.
+#     - Ensure the second set that opened closes before the first set closes.
 # - Still return false if any set goes negative.
 
 # Even more advanced logic: check for balance with pairs that use the same
@@ -17,28 +19,52 @@
 # - If the open and close char is the same (check with each evaluation),
 #   subtract 1 if the set is currently 1.
 
-def balanced_set?(string, char_set)
-  count = 0
+CHAR_SETS = %w[() [] {} “” ‘’].freeze
 
-  string.each_char do |char|
-    count += 1 if char == char_set[:open]
-    count -= 1 if char == char_set[:close]
-    break if count.negative?
+def char_sets_initialize(sets = CHAR_SETS)
+  sets.map do |set|
+    { open: set[0], close: set[1], count: 0 }
   end
+end
 
-  count.zero?
+def update_sets!(char, sets)
+  set_arr = sets.select { |set| [set[:open], set[:close]].include?(char) }
+  return if set_arr.empty?
+
+  set = set_arr.first
+  set[:count] += 1 if char == set[:open]
+  set[:count] -= 1 if char == set[:close]
+end
+
+def char_set_trapped?(sets)
+  # The "set_state_on_open" values, if any, is greater than or equal to the
+  # associated set state at all times. If it goes below, then the open char set
+  # is trapped.
+  # Clear the "set_state_on_open" array when the associated set count goes back
+  # to zero.
+end
+
+def char_sets_broken?(sets)
+  sets.any? { |set| set[:count].negative? }
+end
+
+def char_sets_balanced?(sets)
+  return false if sets.any? { |set| set[:count] != 0 }
+
+  true
 end
 
 def balanced?(string)
-  char_sets = [
-    { open: '(', close: ')' },
-    { open: '[', close: ']' },
-    { open: '{', close: '}' },
-    { open: '“', close: '”' },
-    { open: '‘', close: '’' }
-  ]
+  sets = char_sets_initialize
 
-  char_sets.all? { |char_set| balanced_set?(string, char_set) }
+  string.each_char do |char|
+    # - Return false if one set closes while any other set is open.
+    # - Still return false if any set goes negative.
+    update_sets!(char, sets)
+    break if char_sets_broken?(sets)
+  end
+
+  char_sets_balanced?(sets)
 end
 
 p balanced?('What (is) this?') == true
@@ -53,6 +79,7 @@ p balanced?('What {[((is))]} up') == true
 p balanced?('What {[((is))] up') == false
 p balanced?('What ‘is’ up’') == false
 p balanced?('[(])') == false
+
 p balanced?("'syntax error...") == false
 p balanced?('"syntax complete!"') == true
 
