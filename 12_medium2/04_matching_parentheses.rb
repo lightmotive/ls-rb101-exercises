@@ -43,7 +43,7 @@ def char_set_trapped?(sets)
   # Clear the "close_before_set" array when the associated set count goes back
   # to zero.
   # close_before_set data structure:
-  #   { close: "]", count_min: 1 }
+  #   [ { close: "]", count_min: 1 }, ... ]
 end
 
 def char_sets_broken?(sets)
