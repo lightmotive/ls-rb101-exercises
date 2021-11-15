@@ -37,11 +37,13 @@ def update_sets!(char, sets)
 end
 
 def char_set_trapped?(sets)
-  # The "set_state_on_open" values, if any, is greater than or equal to the
+  # The "close_before_set" values, if any, is greater than or equal to the
   # associated set state at all times. If it goes below, then the open char set
   # is trapped.
-  # Clear the "set_state_on_open" array when the associated set count goes back
+  # Clear the "close_before_set" array when the associated set count goes back
   # to zero.
+  # close_before_set data structure:
+  #   { close: "]", count_min: 1 }
 end
 
 def char_sets_broken?(sets)
