@@ -8,70 +8,81 @@
 #   - If the value ever falls below 0, return false.
 # - Return true if count == 0.
 
-# More advanced logic: check for balance with multiple open-close pairs
-# - Return false if one set closes while any other set is open.
-#   - Track whether any other set opens while a different set is open.
-#     - Ensure the second set that opened closes before the first set closes.
-# - Still return false if any set goes negative.
+# More advanced logic: check for balanced pairs within pairs so the following
+# tests pass:
+#   - p balanced?('[)]') == false
+#   - p balanced?('[(])([)][]') == false
+#   - p balanced?("'syntax error...") == false
+#   - p balanced?('"syntax complete!"') == true
+#   - p balanced?('content ) [other "content"] ( end') == false
+# A previous implementation used manual pair tracking. A simpler solution might
+# use Regexp by basically looping through strings that reduce in size:
+#   - Find all pairs with content, e.g., /\(.*\)/ (loop through all pairs and
+#     concatenate list).
+#     - Evaluate content before and after matching pairs. This regexp should
+#       match content before the first pair char and after last pair char
+#       (open or close). If the content contains any pair char, it's unbalanced.
+#   - Evaluate each match's content (within pair chars) to ensure all is
+#     balanced within matching pairs.
 
 # Even more advanced logic: check for balance with pairs that use the same
 # open-close char, like ' and ".
 # - If the open and close char is the same (check with each evaluation),
 #   subtract 1 if the set is currently 1.
 
-CHAR_SETS = %w[() [] {} “” ‘’].freeze
+PAIRS = %w[() [] {} “” ‘’].freeze
 
-def char_sets_initialize(sets = CHAR_SETS)
-  sets.map do |set|
-    { open: set[0], close: set[1], count: 0, close_before_sets: [] }
+def pairs_initialize(pairs = PAIRS)
+  pairs.map do |set|
+    { open: set[0], close: set[1], count: 0, close_before_pairs: [] }
   end
 end
 
-def sets_open(sets, except_set: nil)
-  sets_open = sets.select { |set| set[:count].positive? }
-  return sets_open if except_set.nil?
+def pairs_open(pairs, except_set: nil)
+  pairs_open = pairs.select { |set| set[:count].positive? }
+  return pairs_open if except_set.nil?
 
-  sets_open.reject do |set|
+  pairs_open.reject do |set|
     set[:open] == except_set[:open]
   end
 end
 
-def update_sets_open!(set, sets)
+def update_pairs_open!(set, pairs)
   set[:count] += 1
-  other_sets_open = sets_open(sets, except_set: set)
-  return if set[:count] != 1 || other_sets_open.empty?
+  other_pairs_open = pairs_open(pairs, except_set: set)
+  return if set[:count] != 1 || other_pairs_open.empty?
 
-  other_sets_open.each do |open_set|
-    set[:close_before_sets].push(
+  other_pairs_open.each do |open_set|
+    set[:close_before_pairs].push(
       { close: open_set[:close], count_min: open_set[:count] }
     )
   end
 end
 
-def update_sets_close!(set)
+def update_pairs_close!(set)
   set[:count] -= 1
-  set[:close_before_sets].clear if set[:count].zero?
+  set[:close_before_pairs].clear if set[:count].zero?
 end
 
-def update_sets!(char, sets)
-  set_arr = sets.select { |set| [set[:open], set[:close]].include?(char) }
+def update_pairs!(char, pairs)
+  set_arr = pairs.select { |set| [set[:open], set[:close]].include?(char) }
   return if set_arr.empty?
 
   set = set_arr.first
 
-  update_sets_open!(set, sets) if char == set[:open]
-  update_sets_close!(set) if char == set[:close]
+  update_pairs_open!(set, pairs) if char == set[:open]
+  update_pairs_close!(set) if char == set[:close]
 
   nil
 end
 
-def char_sets_trapped(sets)
-  sets.select do |set|
-    close_before_sets = set[:close_before_sets]
-    next false if close_before_sets.empty?
+def pairs_trapped(pairs)
+  pairs.select do |set|
+    close_before_pairs = set[:close_before_pairs]
+    next false if close_before_pairs.empty?
 
-    close_before_sets.any? do |close_before_set|
-      sets.any? do |set2|
+    close_before_pairs.any? do |close_before_set|
+      pairs.any? do |set2|
         set2[:close] == close_before_set[:close] &&
           set2[:count] < close_before_set[:count_min]
       end
@@ -79,34 +90,34 @@ def char_sets_trapped(sets)
   end
 end
 
-def char_set_trapped?(sets)
-  !char_sets_trapped(sets).empty?
+def char_set_trapped?(pairs)
+  !pairs_trapped(pairs).empty?
 end
 
-def char_sets_broken?(sets)
-  return true if sets.any? { |set| set[:count].negative? }
-  return true if char_set_trapped?(sets)
+def pairs_broken?(pairs)
+  return true if pairs.any? { |set| set[:count].negative? }
+  return true if char_set_trapped?(pairs)
 
   false
 end
 
-def char_sets_balanced?(sets)
-  return false if sets.any? { |set| set[:count] != 0 }
+def pairs_balanced?(pairs)
+  return false if pairs.any? { |set| set[:count] != 0 }
 
   true
 end
 
 def balanced?(string)
-  sets = char_sets_initialize
+  pairs = pairs_initialize
 
   string.each_char do |char|
     # - Return false if one set closes while any other set is open.
     # - Still return false if any set goes negative.
-    update_sets!(char, sets)
-    break if char_sets_broken?(sets)
+    update_pairs!(char, pairs)
+    break if pairs_broken?(pairs)
   end
 
-  char_sets_balanced?(sets)
+  pairs_balanced?(pairs)
 end
 
 p balanced?('What (is) this?') == true
@@ -124,7 +135,3 @@ p balanced?('[(])') == false
 p balanced?('[(]') == false
 p balanced?('[)]') == false
 p balanced?('[(])([)][]') == false
-
-# Support for these test cases is coming soon!
-# p balanced?("'syntax error...") == false
-# p balanced?('"syntax complete!"') == true
