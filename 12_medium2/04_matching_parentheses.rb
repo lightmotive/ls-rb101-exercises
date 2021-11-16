@@ -23,8 +23,34 @@ CHAR_SETS = %w[() [] {} “” ‘’].freeze
 
 def char_sets_initialize(sets = CHAR_SETS)
   sets.map do |set|
-    { open: set[0], close: set[1], count: 0 }
+    { open: set[0], close: set[1], count: 0, close_before_sets: [] }
   end
+end
+
+def sets_open(sets, except_set: nil)
+  sets_open = sets.select { |set| set[:count].positive? }
+  return sets_open if except_set.nil?
+
+  sets_open.reject do |set|
+    set[:open] == except_set[:open]
+  end
+end
+
+def update_sets_open!(set, sets)
+  set[:count] += 1
+  other_sets_open = sets_open(sets, except_set: set)
+  return if set[:count] != 1 || other_sets_open.empty?
+
+  other_sets_open.each do |open_set|
+    set[:close_before_sets].push(
+      { close: open_set[:close], count_min: open_set[:count] }
+    )
+  end
+end
+
+def update_sets_close!(set)
+  set[:count] -= 1
+  set[:close_before_sets].clear if set[:count].zero?
 end
 
 def update_sets!(char, sets)
@@ -32,22 +58,36 @@ def update_sets!(char, sets)
   return if set_arr.empty?
 
   set = set_arr.first
-  set[:count] += 1 if char == set[:open]
-  set[:count] -= 1 if char == set[:close]
+
+  update_sets_open!(set, sets) if char == set[:open]
+  update_sets_close!(set) if char == set[:close]
+
+  nil
+end
+
+def char_sets_trapped(sets)
+  sets.select do |set|
+    close_before_sets = set[:close_before_sets]
+    next false if close_before_sets.empty?
+
+    close_before_sets.any? do |close_before_set|
+      sets.any? do |set2|
+        set2[:close] == close_before_set[:close] &&
+          set2[:count] < close_before_set[:count_min]
+      end
+    end
+  end
 end
 
 def char_set_trapped?(sets)
-  # The "close_before_set" values, if any, is greater than or equal to the
-  # associated set state at all times. If it goes below, then the open char set
-  # is trapped.
-  # Clear the "close_before_set" array when the associated set count goes back
-  # to zero.
-  # close_before_set data structure:
-  #   [ { close: "]", count_min: 1 }, ... ]
+  !char_sets_trapped(sets).empty?
 end
 
 def char_sets_broken?(sets)
-  sets.any? { |set| set[:count].negative? }
+  return true if sets.any? { |set| set[:count].negative? }
+  return true if char_set_trapped?(sets)
+
+  false
 end
 
 def char_sets_balanced?(sets)
@@ -81,8 +121,10 @@ p balanced?('What {[((is))]} up') == true
 p balanced?('What {[((is))] up') == false
 p balanced?('What ‘is’ up’') == false
 p balanced?('[(])') == false
+p balanced?('[(]') == false
+p balanced?('[)]') == false
+p balanced?('[(])([)][]') == false
 
-p balanced?("'syntax error...") == false
-p balanced?('"syntax complete!"') == true
-
-# To solve that, one would need to track balance across all char sets.
+# Support for these test cases is coming soon!
+# p balanced?("'syntax error...") == false
+# p balanced?('"syntax complete!"') == true
