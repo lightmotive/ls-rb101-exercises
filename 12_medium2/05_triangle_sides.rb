@@ -28,3 +28,19 @@
 # triangle(3, 4, 5) == :scalene
 # triangle(0, 3, 3) == :invalid
 # triangle(3, 1, 1) == :invalid
+
+# * D - Data Structure *
+# - Arrange the provided numbers into an array to facilitate sorted comparison.
+
+# * A - Algorithm *
+# Given an array of 3 integers called sides:
+#
+# - Test whether any side is <= 0.
+#   - return :invalid
+# - Sort sides.
+# - If first 2 sides (shortest sides) sum is <= the last side:
+#   - return :invalid
+# - Count unique elements:
+#   - If 1, return :equilateral
+#   - If 2, return :isosceles
+#   - If 3, return :scalene
