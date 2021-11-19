@@ -44,3 +44,23 @@
 #   - If 1, return :equilateral
 #   - If 2, return :isosceles
 #   - If 3, return :scalene
+
+def triangle(*sides)
+  return :invalid if sides.size != 3 || sides.any? { |side| side <= 0 }
+
+  sides = sides.sort
+  first_two_sum = sides[0] + sides[1]
+  return :invalid if first_two_sum <= sides.last
+
+  case sides.uniq.size
+  when 1 then :equilateral
+  when 2 then :isosceles
+  when 3 then :scalene
+  end
+end
+
+p triangle(3, 3, 3) == :equilateral
+p triangle(3, 3, 1.5) == :isosceles
+p triangle(3, 4, 5) == :scalene
+p triangle(0, 3, 3) == :invalid
+p triangle(3, 1, 1) == :invalid
