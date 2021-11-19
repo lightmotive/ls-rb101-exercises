@@ -24,5 +24,12 @@
 # triangle(50, 50, 50) == :invalid
 
 # * D *
+# - Convert the method arguments to an array (*angles).
 
 # * A *
+# Given an array called `angles` that contains 3 Integers:
+#
+# - Return :invalid if angles includes values <= 0 OR angles sum != 180.
+# - Return :right if angles includes 90
+# - Return :acute if all angles < 90
+# - Return :obtuse if angles includes any value > 90
