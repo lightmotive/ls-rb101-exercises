@@ -46,10 +46,10 @@
 #   - If 3, return :scalene
 
 def triangle(*sides)
-  return :invalid if sides.size != 3 || sides.include?(0)
-
-  sides = sides.sort
-  return :invalid if sides[0..1].sum <= sides.last
+  largest_side = sides.max
+  return :invalid if sides.size != 3 ||
+                     sides.include?(0) ||
+                     2 * largest_side > sides.sum
 
   case sides.uniq.size
   when 1 then :equilateral
