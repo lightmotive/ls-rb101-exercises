@@ -2,22 +2,22 @@
 
 # Basic logic
 # - Initialize two Date objects.
-#   - Create a range from day 1 through 12/31 of specified year.
+#   - Create a range from day 1/13 through 12/13 of specified year.
 # - Call `select` on range.
-#    - Within `select`, return true when day of month is 13 and day of week
-#      is 5.
+#   - First, select Thursdays.
+#   - Next, select where month day = 13.
 
 require 'date'
 
 def friday_13th_dates(year)
-  date_start = Date.new(year, 1, 1)
-  date_end = Date.new(year, 12, 31)
+  date_start = Date.new(year, 1, 13)
+  date_end = Date.new(year, 12, 13)
 
-  (date_start..date_end).select { |date| date.wday == 5 && date.mday == 13 }
+  (date_start..date_end).select(&:friday?).select { |date| date.mday == 13 }
 end
 
 def friday_13th_count(year)
-  friday_13th_dates(year).tap { |dates| p dates }.size
+  friday_13th_dates(year).size
 end
 
 p friday_13th_count(2015) == 3
