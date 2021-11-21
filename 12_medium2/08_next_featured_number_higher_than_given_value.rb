@@ -11,16 +11,19 @@
 #   - Raise an exception if the number >= 9,999,999,999
 
 def featured(integer)
+  integer += 1
+  integer += 1 until integer.odd? && (integer % 7).zero?
+
   loop do
-    integer += 1
+    digit_chars = integer.to_s.chars
+    break integer if digit_chars.size == digit_chars.uniq.size
 
-    if integer.odd? &&
-       (integer % 7).zero?
-      digits = integer.digits
-      break integer if digits == digits.uniq
-    end
+    # Integer#digits is much slower than Integer#to_s:
+    #   https://stackoverflow.com/a/47956725/2033465
 
-    raise StandardError, 'There is no next featured number.' if integer >= 9_999_999_999
+    integer += 14
+
+    raise StandardError, 'There is no next featured number.' if integer >= 9_876_543_210
   end
 end
 
