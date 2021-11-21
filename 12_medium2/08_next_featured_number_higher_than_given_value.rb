@@ -8,3 +8,4 @@
 #     - Odd
 #     - Multiple of 7
 #     - All digits are unique
+#   - Raise an exception if the number >= 9,999,999,999
