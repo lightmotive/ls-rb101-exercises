@@ -107,23 +107,13 @@ pp longest_sentence(sample_text1)
 puts "\n* Longest Word, Sample Text 1 *"
 pp longest_word(sample_text1)
 
-# require 'net/http'
-# def web_content(url)
-#   uri = URI(url)
-#   Net::HTTP.get_response(uri)
-# end
+require 'net/http'
+def web_content(url)
+  uri = URI(url)
+  Net::HTTP.get(uri)
+end
 
-# p longest_sentence(
-#   web_content('http://www.gutenberg.org/cache/epub/84/pg84.txt')
-# )
-# It appears the site is now redirecting requests, possibly due to
-# Launch School student overuse!
-#   Response: #<Net::HTTPFound 302 Found readbody=true>
-#
-# Therefore, we'll download and load it from a local file as with the first
-# example.
-
-sample_text2 = File.read('01_longest_sentence_pg84.txt')
+sample_text2 = web_content('https://raw.githubusercontent.com/lightmotive/ls-rb101-exercises/main/12_medium2/01_longest_sentence_pg84.txt')
 
 puts "\n* Longest Paragraph, Sample Text 2 *"
 pp longest_paragraph(sample_text2)
