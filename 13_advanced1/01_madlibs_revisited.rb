@@ -45,3 +45,24 @@
 # - Use Kernel#format to identify the placeholders in the string, then loop
 #   through each placeholder.
 #   - Select the specified word type using Array#sample.
+
+# NOTE: This solution requires Ruby v2.3+
+
+require 'yaml'
+
+def madlib_random(template, words)
+  data = Hash.new do |_, k|
+    case k
+    when :verb, :noun, :adjective, :adverb
+      words["#{k}s"].sample
+    else "%<#{k}>s"
+    end
+  end
+
+  template % data
+end
+
+puts madlib_random(
+  File.read('01_madlibs_revisited.txt'),
+  YAML.load_file('01_madlibs_revisited.yaml')
+)
