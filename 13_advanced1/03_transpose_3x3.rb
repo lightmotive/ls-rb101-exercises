@@ -34,9 +34,8 @@
 def transpose(matrix)
   transposed = []
 
-  0.upto(matrix.size - 1) do |column_index|
-    row_transposed = []
-    matrix.each { |row| row_transposed.push(row[column_index]) }
+  (0..(matrix.size - 1)).each do |column_index|
+    row_transposed = matrix.map { |row| row[column_index] }
     transposed.push(row_transposed)
   end
 
