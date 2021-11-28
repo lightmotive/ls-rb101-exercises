@@ -55,10 +55,11 @@ p matrix == [[1, 5, 8], [4, 7, 2], [3, 9, 6]]
 
 def transpose!(matrix)
   index_max = matrix.size - 1
-  (0..index_max).each do |row_index|
-    (row_index..index_max).each do |column_index|
-      matrix[row_index][column_index], matrix[column_index][row_index] =
-        matrix[column_index][row_index], matrix[row_index][column_index]
+  (0..index_max).each do |rx|
+    (rx..index_max).each do |cx|
+      next if rx == cx
+
+      matrix[rx][cx], matrix[cx][rx] = matrix[cx][rx], matrix[rx][cx]
     end
   end
 end
