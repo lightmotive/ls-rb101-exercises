@@ -54,20 +54,13 @@ p new_matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
 p matrix == [[1, 5, 8], [4, 7, 2], [3, 9, 6]]
 
 def transpose!(matrix)
-  # Basically, we need to iterate through the matrix diagonally.
-  #   - After the first iteration, the first row and column are transposed.
-  #     - Start the column index at the current row index.
-  # - Swap matrix[row_index][column_index] with matrix[column_index][row_index].
-
-  # This only partially works; duplicate transpositions occur;
-  # logic updated above, will implement changes next.
-
   index_max = matrix.size - 1
-  range = (0..index_max)
-  range.each do |row_index|
-    range.each do |column_index|
-      matrix[row_index][column_index] = matrix[column_index][row_index]
+  (0..index_max).each do |row_index|
+    (row_index..index_max).each do |column_index|
+      matrix[row_index][column_index], matrix[column_index][row_index] =
+        matrix[column_index][row_index], matrix[row_index][column_index]
     end
+    p matrix
   end
 end
 
