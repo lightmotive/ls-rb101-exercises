@@ -60,9 +60,8 @@ def transpose!(matrix)
       matrix[row_index][column_index], matrix[column_index][row_index] =
         matrix[column_index][row_index], matrix[row_index][column_index]
     end
-    p matrix
   end
 end
 
 transpose!(matrix)
-p matrix #== [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
+p matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
