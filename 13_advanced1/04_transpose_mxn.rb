@@ -23,10 +23,10 @@
 # - Return transposed values, which will be the transposed arrays.
 
 def transpose(matrix)
-  transposed = Hash.new { |h, k| h[k] = [] }
+  transposed = Hash.new { |h, k| h[k] = Array.new(matrix.size) }
 
-  matrix.each do |row|
-    row.each_with_index { |col, col_idx| transposed[col_idx].push(col) }
+  matrix.each_with_index do |row, row_idx|
+    row.each_with_index { |col, col_idx| transposed[col_idx][row_idx] = col }
   end
 
   transposed.values
