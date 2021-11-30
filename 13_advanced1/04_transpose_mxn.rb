@@ -22,7 +22,7 @@
 #     - Append the column value to transposed[column_index].
 # - Return transposed values, which will be the transposed arrays.
 
-def transpose(matrix)
+def transpose_hash(matrix)
   transposed = Hash.new { |h, k| h[k] = Array.new(matrix.size) }
 
   matrix.each_with_index do |row, row_idx|
@@ -32,8 +32,39 @@ def transpose(matrix)
   transposed.values
 end
 
-p transpose([[1, 2, 3, 4]]) == [[1], [2], [3], [4]]
-p transpose([[1], [2], [3], [4]]) == [[1, 2, 3, 4]]
-p transpose([[1, 2, 3, 4, 5], [4, 3, 2, 1, 0], [3, 7, 8, 6, 2]]) ==
-  [[1, 4, 3], [2, 3, 7], [3, 2, 8], [4, 1, 6], [5, 0, 2]]
-p transpose([[1]]) == [[1]]
+def transpose_map(matrix)
+  result = []
+  number_of_rows = matrix.size
+  number_of_columns = matrix.first.size
+
+  (0...number_of_columns).each do |column_index|
+    new_row = (0...number_of_rows).map { |row_index| matrix[row_index][column_index] }
+    result << new_row
+  end
+
+  result
+end
+
+require_relative '../../ruby-common/test'
+require_relative '../../ruby-common/benchmark_report'
+
+TESTS = [
+  { input: [[1, 2, 3, 4]], expected_output: [[1], [2], [3], [4]] },
+  {  input: [[1], [2], [3], [4]], expected_output: [[1, 2, 3, 4]] },
+  {  input: [[1, 2, 3, 4, 5], [4, 3, 2, 1, 0], [3, 7, 8, 6, 2]],
+     expected_output: [[1, 4, 3], [2, 3, 7], [3, 2, 8], [4, 1, 6], [5, 0, 2]] },
+  {  input: [[1]], expected_output: [[1]] }
+].freeze
+
+run_tests('transpose_hash', TESTS, ->(input) { transpose_hash(input) })
+run_tests('transpose_map', TESTS, ->(input) { transpose_map(input) })
+
+benchmark_report(
+  5, 500, TESTS,
+  [
+    { label: 'hash', method: ->(input) { transpose_hash(input) } },
+    { label: 'map', method: ->(input) { transpose_map(input) } }
+  ]
+)
+
+# Clearly, `map` is much faster than `hash`: 1.65x faster on average!
