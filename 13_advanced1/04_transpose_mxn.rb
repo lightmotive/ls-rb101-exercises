@@ -33,16 +33,16 @@ def transpose_hash(matrix)
 end
 
 def transpose_map(matrix)
-  result = []
+  transposed = []
   number_of_rows = matrix.size
   number_of_columns = matrix.first.size
 
   (0...number_of_columns).each do |column_index|
-    new_row = (0...number_of_rows).map { |row_index| matrix[row_index][column_index] }
-    result << new_row
+    columns = (0...number_of_rows).map { |row_index| matrix[row_index][column_index] }
+    transposed << columns
   end
 
-  result
+  transposed
 end
 
 require_relative '../../ruby-common/test'
