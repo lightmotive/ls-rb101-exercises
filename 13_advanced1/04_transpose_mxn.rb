@@ -16,11 +16,23 @@
 # Therefore, given a matrix with any dimension, with each array the same size:
 #
 # - Initialize transposed Hash with default empty array.
-# - Iterate through the matrix, tracking row and row_index.
+# - Iterate through the matrix, tracking row.
 #   - Iterate through each column in the current row, tracking column and
 #     column_index.
 #     - Append the column value to transposed[column_index].
 # - Return transposed values, which will be the transposed arrays.
+
+def transpose(matrix)
+  transposed = Hash.new { |h, k| h[k] = [] }
+
+  matrix.each do |row|
+    row.each_with_index do |column, col_idx|
+      transposed[col_idx].push(column)
+    end
+  end
+
+  transposed.values
+end
 
 p transpose([[1, 2, 3, 4]]) == [[1], [2], [3], [4]]
 p transpose([[1], [2], [3], [4]]) == [[1, 2, 3, 4]]
