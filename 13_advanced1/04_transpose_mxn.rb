@@ -23,10 +23,10 @@
 # - Return transposed values, which will be the transposed arrays.
 
 def transpose_hash(matrix)
-  transposed = Hash.new { |h, k| h[k] = Array.new(matrix.size) }
+  transposed = Hash.new { |h, k| h[k] = [] }
 
-  matrix.each_with_index do |row, row_idx|
-    row.each_with_index { |col, col_idx| transposed[col_idx][row_idx] = col }
+  matrix.each do |row|
+    row.each_with_index { |col, col_idx| transposed[col_idx].push(col) }
   end
 
   transposed.values
@@ -67,4 +67,9 @@ benchmark_report(
   ]
 )
 
-# Clearly, `map` is much faster than `hash`: 1.65x faster on average!
+# Clearly, `map` is 1.65x faster than `hash` on average!
+
+# After replacing the Hash default fixed size Array to unsized Array, `map`
+# was still faster by 1.33x on average.
+#   A question to explore in the future: when should one use fixed size arrays?
+#   - How about with very large arrays?
