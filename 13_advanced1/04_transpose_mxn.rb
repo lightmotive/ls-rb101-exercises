@@ -26,9 +26,7 @@ def transpose(matrix)
   transposed = Hash.new { |h, k| h[k] = [] }
 
   matrix.each do |row|
-    row.each_with_index do |column, col_idx|
-      transposed[col_idx].push(column)
-    end
+    row.each_with_index { |col, col_idx| transposed[col_idx].push(col) }
   end
 
   transposed.values
