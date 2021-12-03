@@ -78,11 +78,10 @@ def transpose_non_square!(matrix)
   #     move data from D to successor of s
 
   # I will consider implementing that in the future...
+  matrix.clear
 end
 
 def transpose!(matrix)
-  return transpose_square!(matrix)
-
   if matrix.size == matrix[0].size
     transpose_square!(matrix)
   else
