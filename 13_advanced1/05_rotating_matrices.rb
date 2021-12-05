@@ -29,6 +29,7 @@ def rotate90(matrix)
 
   (matrix.size - 1).downto(0) do |row_idx|
     rotated_col_idx = -row_idx + matrix.size - 1
+
     matrix[row_idx].each_with_index do |element, col_idx|
       rotated[col_idx] = [] if rotated[col_idx].nil?
       rotated[col_idx][rotated_col_idx] = element
