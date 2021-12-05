@@ -19,10 +19,24 @@
 # - Create a new matrix called `rotated` to store the result
 # - Iterate through rows in reverse order with row_idx:
 #   - Iterate through each element in the row with col_idx:
-#     - Add the current element to rotated[col_idx]["reversed row_idx"]
-#       - "Reversed row_idx" == -row_idx + matrix.size - 1
+#     - Add the current element to rotated[col_idx][rotated_col_idx]
+#       - rotated_col_idx == -row_idx + matrix.size - 1
 
 # C (Implementation, to be coded with intent)
+
+def rotate90(matrix)
+  rotated = []
+
+  (matrix.size - 1).downto(0) do |row_idx|
+    rotated_col_idx = -row_idx + matrix.size - 1
+    matrix[row_idx].each_with_index do |element, col_idx|
+      rotated[col_idx] = [] if rotated[col_idx].nil?
+      rotated[col_idx][rotated_col_idx] = element
+    end
+  end
+
+  rotated
+end
 
 matrix1 = [
   [1, 5, 8],
