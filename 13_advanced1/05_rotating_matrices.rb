@@ -1,24 +1,26 @@
 # frozen_string_literal: true
 
 # **PEDAC**
-=begin
-*P*
-Input: Array of arrays (matrix)
-Output: The same array, rotated 90 degrees clockwise
-Metal model: To rotate a matrix 90 degrees, convert each row into columns.
-  The last row becomes the first column, the second to last row becomes the 
-  second column, and so on.
-
-*E*
-Tests below implementation...
-
-*D*
-Given any matrix, produce a new matrix (array of arrays). We'll create a new
-array.
-
-*A*
-
-=end
+# *P*
+# Input: Array of arrays (matrix)
+# Output: The same array, rotated 90 degrees clockwise
+# Metal model: To rotate a matrix 90 degrees, convert each row into columns.
+#   The last row becomes the first column, the second to last row becomes the
+#   second column, and so on.
+#
+# *E*
+# Tests below implementation...
+#
+# *D*
+# Given any matrix, produce a new matrix (array of arrays). We'll create a new
+# array.
+#
+# *A*
+# - Create a new matrix called `rotated` to store the result
+# - Iterate through rows in reverse order with row_idx:
+#   - Iterate through each element in the row with col_idx:
+#     - Add the current element to rotated[col_idx]["reversed row_idx"]
+#       - "Reversed row_idx" == -row_idx + matrix.size - 1
 
 # C (Implementation, to be coded with intent)
 
