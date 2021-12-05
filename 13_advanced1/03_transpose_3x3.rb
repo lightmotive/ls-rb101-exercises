@@ -56,9 +56,8 @@ p matrix == [[1, 5, 8], [4, 7, 2], [3, 9, 6]]
 # ** Further exploration: in-place transpose **
 
 def transpose_square!(matrix)
-  index_max = matrix.size - 1
-  (0..index_max).each do |rx|
-    (rx..index_max).each do |cx|
+  (0...matrix.size).each do |rx|
+    (rx...matrix.size).each do |cx|
       next if rx == cx
 
       matrix[rx][cx], matrix[cx][rx] = matrix[cx][rx], matrix[rx][cx]
