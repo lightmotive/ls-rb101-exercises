@@ -42,32 +42,40 @@ def array_position_value(array, position)
   array[position]
 end
 
-# array1 and array2 must be sorted.
-def merge(array1, array2)
-  return [] if array1.empty? && array2.empty?
+def array_position_values(arrays, positions)
+  arrays.map.with_index do |array, index|
+    array_position_value(array, positions[index])
+  end
+end
+
+def merge_position!(merged, array, positions, position)
+  merged.push(array[positions[position]])
+  positions[position] += 1
+end
+
+def merge_compare!(arrays, positions, values, merged)
+  if values[0] == :end
+    merge_position!(merged, arrays[1], positions, 1)
+  elsif values[1] == :end || values[0] <= values[1]
+    merge_position!(merged, arrays[0], positions, 0)
+  else
+    merge_position!(merged, arrays[1], positions, 1)
+  end
+end
+
+# Each array in *arrays must be sorted. Provide exactly 2 arrays.
+def merge(*arrays)
+  return [] if arrays[0].empty? && arrays[1].empty?
 
   merged = []
-  array_positions = [0, 0]
+  positions = arrays.map { 0 }
 
   loop do
-    array1_pos_value = array_position_value(array1, array_positions[0])
-    array2_pos_value = array_position_value(array2, array_positions[1])
+    values = array_position_values(arrays, positions)
 
-    break merged if array1_pos_value == :end && array2_pos_value == :end
+    break merged if values[0] == :end && values[1] == :end
 
-    if array1_pos_value == :end
-      merged.push(array2[array_positions[1]])
-      array_positions[1] += 1
-    elsif array2_pos_value == :end
-      merged.push(array1[array_positions[0]])
-      array_positions[0] += 1
-    elsif array1_pos_value <= array2_pos_value
-      merged.push(array1[array_positions[0]])
-      array_positions[0] += 1
-    else
-      merged.push(array2[array_positions[1]])
-      array_positions[1] += 1
-    end
+    merge_compare!(arrays, positions, values, merged)
   end
 end
 
