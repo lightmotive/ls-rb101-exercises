@@ -76,11 +76,11 @@ end
 # - Return result
 def rotate_map(matrix, rotations = 1)
   result = []
-  number_of_rows = matrix.size
+  reverse_row_index_range = (-(matrix.size - 1)..0)
   number_of_columns = matrix.first.size
 
   (0...number_of_columns).each do |column_index|
-    new_row = (-(number_of_rows - 1)..0).map do |row_index|
+    new_row = reverse_row_index_range.map do |row_index|
       matrix[row_index][column_index]
     end
 
@@ -148,4 +148,6 @@ benchmark_report(
 # a procedural approach!
 
 # The new rotate_map method is slightly faster than map_reverse most of the
-# time. Is it consistently faster with larger arrays? Let's try...
+# time. Is it consistently faster with larger arrays?
+
+# With larger arrays, map_reverse is usually faster. That's surprising!
