@@ -24,7 +24,7 @@
 
 # C (Implementation, to be coded with intent)
 
-def rotate90(matrix)
+def rotate(matrix, rotations: 1)
   rotated = []
 
   (matrix.size - 1).downto(0) do |row_idx|
@@ -36,7 +36,7 @@ def rotate90(matrix)
     end
   end
 
-  rotated
+  rotations == 1 ? rotated : rotate(rotated, rotations: rotations - 1)
 end
 
 matrix1 = [
@@ -50,9 +50,9 @@ matrix2 = [
   [5, 1, 0, 8]
 ]
 
-new_matrix1 = rotate90(matrix1)
-new_matrix2 = rotate90(matrix2)
-new_matrix3 = rotate90(rotate90(rotate90(rotate90(matrix2))))
+new_matrix1 = rotate(matrix1)
+new_matrix2 = rotate(matrix2)
+new_matrix3 = rotate(matrix2, rotations: 4)
 
 p new_matrix1 == [[3, 4, 1], [9, 7, 5], [6, 2, 8]]
 p new_matrix2 == [[5, 3], [1, 7], [0, 4], [8, 2]]
