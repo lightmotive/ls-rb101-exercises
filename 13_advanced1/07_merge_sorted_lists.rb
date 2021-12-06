@@ -63,12 +63,13 @@ def merge_compare!(arrays, positions, values, merged)
   end
 end
 
-# Each array in *arrays must be sorted. Provide exactly 2 arrays.
-def merge(*arrays)
-  return [] if arrays[0].empty? && arrays[1].empty?
+# Each array must be sorted.
+def merge(array1, array2)
+  return [] if array1.empty? && array2.empty?
 
   merged = []
-  positions = arrays.map { 0 }
+  arrays = [array1, array2]
+  positions = [0, 0]
 
   loop do
     values = array_position_values(arrays, positions)
