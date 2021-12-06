@@ -41,41 +41,33 @@ def array_position_value(array, position)
   array[position]
 end
 
-def array_position_values(arrays, positions)
-  arrays.map.with_index do |array, index|
-    array_position_value(array, positions[index])
-  end
-end
-
-def merge_position!(merged, array, positions, position)
-  merged.push(array[positions[position]])
-  positions[position] += 1
-end
-
-def merge_compare!(arrays, positions, values, merged)
-  if values[0] == :end
-    merge_position!(merged, arrays[1], positions, 1)
-  elsif values[1] == :end || values[0] <= values[1]
-    merge_position!(merged, arrays[0], positions, 0)
-  else
-    merge_position!(merged, arrays[1], positions, 1)
-  end
-end
-
-# Each array must be sorted.
+# Argument arrays must be sorted.
 def merge_one_pass(array1, array2)
   return [] if array1.empty? && array2.empty?
 
   merged = []
-  arrays = [array1, array2]
-  positions = [0, 0]
+  array1_idx = 0
+  array2_idx = 0
 
   loop do
-    values = array_position_values(arrays, positions)
+    array1_pos_value = array_position_value(array1, array1_idx)
+    array2_pos_value = array_position_value(array2, array2_idx)
 
-    break merged if values[0] == :end && values[1] == :end
+    break merged if array1_pos_value == :end && array2_pos_value == :end
 
-    merge_compare!(arrays, positions, values, merged)
+    if array1_pos_value == :end
+      merged.push(array2[array2_idx])
+      array2_idx += 1
+    elsif array2_pos_value == :end
+      merged.push(array1[array1_idx])
+      array1_idx += 1
+    elsif array1_pos_value <= array2_pos_value
+      merged.push(array1[array1_idx])
+      array1_idx += 1
+    else
+      merged.push(array2[array2_idx])
+      array2_idx += 1
+    end
   end
 end
 
@@ -107,12 +99,12 @@ end
 require_relative '../../ruby-common/test'
 require_relative '../../ruby-common/benchmark_report'
 
-def sorted_big_array_create(element_count)
-  (1..element_count).map { rand(element_count) }.sort
-end
+# def sorted_big_array_create(element_count)
+#   (1..element_count).map { rand(element_count) }.sort
+# end
 
-big_array1 = sorted_big_array_create(3000)
-big_array2 = sorted_big_array_create(3000)
+# big_array1 = sorted_big_array_create(3000)
+# big_array2 = sorted_big_array_create(3000)
 
 TESTS = [
   { input: [[1, 5, 9], [2, 6, 8]],
@@ -122,9 +114,9 @@ TESTS = [
   { input: [[], [1, 4, 5]],
     expected_output: [1, 4, 5] },
   { input: [[1, 4, 5], []],
-    expected_output: [1, 4, 5] },
-  { input: [big_array1, big_array2],
-    expected_output: merge_multiple_passes(big_array1, big_array2) }
+    expected_output: [1, 4, 5] }
+  # , { input: [big_array1, big_array2],
+  #   expected_output: merge_multiple_passes(big_array1, big_array2) }
 ].freeze
 
 run_tests('merge_one_pass', TESTS, ->(input) { merge_one_pass(*input) })
@@ -142,7 +134,9 @@ benchmark_report(
 )
 
 # Launch School's "multiple_passes" solution is over 15x faster than the
-# "one_pass" solution. Let's dive deeper...
+# "one_pass" solution (1.7x faster with simplified version restored).
+
+# Let's dive deeper...
 
 # The Launch School solution that seems like multiple passes is actually only
 # one pass through each array, and it inherently handles cases where one array
@@ -151,7 +145,10 @@ benchmark_report(
 
 # It might seem like "one_pass" would be faster because it's comparing each
 # value exactly once, whereas "multiple_passes" compares values multiple times.
-# However, "one_pass" is seeking to a specific index for both arrays.
+# However, "one_pass" is seeking to a specific index for both arrays and
+# has to evaluate a multi-branch `if` statement each time.
+
 # "multiple_passes", on the other hand, iterates through array1, then only
 # seeks to specific positions for the second array. It also doesn't have the
 # overhead of tracking multiple indices in an array.
+# "multiple_passes" is also much simpler.
