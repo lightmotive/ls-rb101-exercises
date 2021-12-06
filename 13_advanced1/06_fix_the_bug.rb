@@ -3,19 +3,19 @@
 def my_method(array)
   if array.empty?
     []
-  elsif 
+  elsif array.size == 1
+    [7 * array.first]
+  else
     array.map do |value|
       value * value
     end
-  else
-    [7 * array.first]
   end
 end
 
 p my_method([]) == []
-p my_method([3]) #== [21]
-p my_method([3, 4]) #== [9, 16]
-p my_method([5, 6, 7]) #== [25, 36, 49]
+p my_method([3]) == [21]
+p my_method([3, 4]) == [9, 16]
+p my_method([5, 6, 7]) == [25, 36, 49]
 
 # `my_method` has an empty `elsif` as part of the `if` statement. One could
 # also interpret that as if Ruby interprets the body of the elsif statement as
