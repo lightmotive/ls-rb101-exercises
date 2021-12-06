@@ -104,6 +104,14 @@ matrix2 = [
   [5, 1, 0, 8]
 ]
 
+def matrix_big_create(row_count, column_count)
+  (1..row_count).map do
+    (1..column_count).map { rand(column_count) }
+  end
+end
+matrix_big = matrix_big_create(100, 150)
+matrix_big_rotated = rotate_map(matrix_big)
+
 TESTS = [
   {
     input: [matrix1],
@@ -116,6 +124,10 @@ TESTS = [
   {
     input: [matrix2, 4],
     expected_output: matrix2
+  },
+  {
+    input: [matrix_big],
+    expected_output: matrix_big_rotated
   }
 ].freeze
 
