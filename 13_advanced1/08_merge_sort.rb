@@ -99,16 +99,16 @@ def merge(array1, array2)
 end
 
 def merge_sort(array)
-  # - If array length is 1, return array.
-  # - Split array into two: arr1 and arr2
-  # - Continue splitting array into 2 recursively:
-  #   - Set arr1 = merge_sort(arr1).
-  #   - Set arr2 = merge_sort(arr2).
-  #     *Those two lines will call merge_sort on each split array until each
-  #     array's size is 1. When it's finished splitting, arr1 and arr2 will have
-  #     exactly 1 element each.*
-  # - Return merge(arr1, arr2)
-  #   *That will merge the recursively split arrays in reverse order.*
+  return array if array.size == 1
+
+  middle_index = array.size / 2
+  arr1 = array[0...middle_index]
+  arr2 = array[middle_index..-1]
+
+  arr1 = merge_sort(arr1)
+  arr2 = merge_sort(arr2)
+
+  merge(arr1, arr2)
 end
 
 p merge_sort([9, 5, 7, 1]) == [1, 5, 7, 9]
