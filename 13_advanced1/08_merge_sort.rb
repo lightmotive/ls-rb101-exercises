@@ -17,6 +17,7 @@
 # - Track the second array's current position in a variable.
 #
 # *A*
+# Procedure: merge
 # Given two arrays, array1 and array2:
 #
 # - Initialize `merged` and assign to a new array.
@@ -64,10 +65,11 @@
 # - A recursive method that splits the array into nested sub-arrays,
 #   then merges them back together two arrays at a time using the first method.
 #
-# Method: merge_sort (recursive)
+# Procedure: merge_sort (recursive)
 # (derived from https://www.tutorialspoint.com/data_structures_algorithms/merge_sort_algorithm.htm)
 # ---
 # Given an array:
+#
 # - If array length is 1, return array.
 # - Split array into two: arr1 and arr2
 # - Continue splitting array into 2 recursively:
@@ -78,3 +80,39 @@
 #     exactly 1 element each.*
 # - Return merge(arr1, arr2)
 #   *That will merge the recursively split arrays in reverse order.*
+
+# Procedure: merge
+def merge(array1, array2)
+  # - Initialize `merged` and assign to a new array.
+  # - Initialize tracking variable for second array as `index2` and assign to 0.
+  # - Iterate through each element in `array1` as `element1`
+  #   - While `index2` hasn't reached the end AND
+  #     `array2[index2]`` is <= `element1`:
+  #     - Append `array2[index2]` to `merged`.
+  #     - Increment `index2`.
+  #   - Append `element1` to `merged`
+  # - Append everything in `array2` from `index2` to the end; those are values
+  #   that wouldn't pass the `array2[index2] <= element1` above.
+  # - Return `merged`.
+end
+
+def merge_sort(array)
+  # - If array length is 1, return array.
+  # - Split array into two: arr1 and arr2
+  # - Continue splitting array into 2 recursively:
+  #   - Set arr1 = merge_sort(arr1).
+  #   - Set arr2 = merge_sort(arr2).
+  #     *Those two lines will call merge_sort on each split array until each
+  #     array's size is 1. When it's finished splitting, arr1 and arr2 will have
+  #     exactly 1 element each.*
+  # - Return merge(arr1, arr2)
+  #   *That will merge the recursively split arrays in reverse order.*
+end
+
+p merge_sort([9, 5, 7, 1]) == [1, 5, 7, 9]
+p merge_sort([5, 3]) == [3, 5]
+p merge_sort([6, 2, 7, 1, 4]) == [1, 2, 4, 6, 7]
+p merge_sort(%w[Sue Pete Alice Tyler Rachel Kim Bonnie]) ==
+  %w[Alice Bonnie Kim Pete Rachel Sue Tyler]
+p merge_sort([7, 3, 9, 15, 23, 1, 6, 51, 22, 37, 54, 43, 5, 25, 35, 18,
+              46]) == [1, 3, 5, 6, 7, 9, 15, 18, 22, 23, 25, 35, 37, 43, 46, 51, 54]
