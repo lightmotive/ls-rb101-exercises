@@ -81,19 +81,21 @@
 # - Return merge(arr1, arr2)
 #   *That will merge the recursively split arrays in reverse order.*
 
-# Procedure: merge
+# Array arguments must be sorted.
 def merge(array1, array2)
-  # - Initialize `merged` and assign to a new array.
-  # - Initialize tracking variable for second array as `index2` and assign to 0.
-  # - Iterate through each element in `array1` as `element1`
-  #   - While `index2` hasn't reached the end AND
-  #     `array2[index2]`` is <= `element1`:
-  #     - Append `array2[index2]` to `merged`.
-  #     - Increment `index2`.
-  #   - Append `element1` to `merged`
-  # - Append everything in `array2` from `index2` to the end; those are values
-  #   that wouldn't pass the `array2[index2] <= element1` above.
-  # - Return `merged`.
+  merged = []
+  index2 = 0
+
+  array1.each do |element1|
+    while index2 < array2.size && array2[index2] <= element1
+      merged << array2[index2]
+      index2 += 1
+    end
+
+    merged << element1
+  end
+
+  merged.concat(array2[index2..-1])
 end
 
 def merge_sort(array)
