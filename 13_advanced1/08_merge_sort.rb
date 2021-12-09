@@ -111,10 +111,52 @@ def merge_sort(array)
   merge(arr1, arr2)
 end
 
-p merge_sort([9, 5, 7, 1]) == [1, 5, 7, 9]
-p merge_sort([5, 3]) == [3, 5]
-p merge_sort([6, 2, 7, 1, 4]) == [1, 2, 4, 6, 7]
-p merge_sort(%w[Sue Pete Alice Tyler Rachel Kim Bonnie]) ==
-  %w[Alice Bonnie Kim Pete Rachel Sue Tyler]
-p merge_sort([7, 3, 9, 15, 23, 1, 6, 51, 22, 37, 54, 43, 5, 25, 35, 18,
-              46]) == [1, 3, 5, 6, 7, 9, 15, 18, 22, 23, 25, 35, 37, 43, 46, 51, 54]
+# Further exploration: perform merge sort non-recursively.
+# *A*
+# Src: https://charlesreid1.com/wiki/Merge_Sort/Pseudocode#Nonrecursive_.28Bottom-Up.29_Merge_Sort_Algorithm_Pseudocode
+# function merge_sort(S) {
+#     src = S
+#     dest = (empty array, size of S)
+#     for k in log2(length S) {
+#         we have runs of length i = 2^k
+#         we are iterating over pairs of runs of length i = 2^k to sort them
+#         this iteration assembles runs of length 2*i = 2^{k+1}
+#         for j in range 0 to n, taking strides of size 2*i {
+#             merge(src, dest, j, i)  // j = where to start, i = stride size, this merges these two halves
+#         }
+#     }
+# }
+def merge_sort_non_recursive(array)
+
+end
+
+require_relative '../../ruby-common/test'
+require_relative '../../ruby-common/benchmark_report'
+
+TESTS = [
+  { input: [9, 5, 7, 1], expected_output: [1, 5, 7, 9] },
+  { input: [5, 3], expected_output: [3, 5] },
+  { input: [6, 2, 7, 1, 4], expected_output: [1, 2, 4, 6, 7] },
+  { input: %w[Sue Pete Alice Tyler Rachel Kim Bonnie],
+    expected_output: %w[Alice Bonnie Kim Pete Rachel Sue Tyler] },
+  { input: [7, 3, 9, 15, 23, 1, 6, 51, 22,
+            37, 54, 43, 5, 25, 35, 18, 46],
+    expected_output: [1, 3, 5, 6, 7, 9, 15, 18, 22,
+                      23, 25, 35, 37, 43, 46, 51, 54] }
+  # , { input: [big_array1, big_array2],
+  #   expected_output: merge_multiple_passes(big_array1, big_array2) }
+].freeze
+
+run_tests('merge_sort', TESTS, ->(input) { merge_sort(input) })
+run_tests('merge_sort_non_recursive', TESTS,
+          ->(input) { merge_sort_non_recursive(input) })
+
+benchmark_report(
+  2, 200, TESTS,
+  [
+    { label: 'one_pass',
+      method: ->(input) { merge_sort(input) } },
+    { label: 'multiple_passes',
+      method: ->(input) { merge_sort_non_recursive(input) } }
+  ]
+)
