@@ -134,18 +134,22 @@ def merge_in_place!(array, swap_start_idx, swap_size)
   array[swap_start_idx..swap_end] = merge(first_set, second_set)
 end
 
+def merge_pass!(array, swap_size)
+  swap_start_idx = 0
+
+  while swap_start_idx < array.size - swap_size
+    merge_in_place!(array, swap_start_idx, swap_size)
+
+    swap_start_idx += 2 * swap_size
+  end
+end
+
 def merge_sort_non_recursive(array)
   array = array.dup
   swap_size = 1
 
   while swap_size < array.size
-    swap_start_idx = 0
-
-    while swap_start_idx < array.size - swap_size
-      merge_in_place!(array, swap_start_idx, swap_size)
-
-      swap_start_idx += 2 * swap_size
-    end
+    merge_pass!(array, swap_size)
 
     swap_size *= 2
   end
