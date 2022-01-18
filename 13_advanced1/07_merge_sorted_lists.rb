@@ -81,7 +81,7 @@ end
 #   - Append the current array1 value to result.
 # - Concatenate any values remaining in array2 that are larger than the last
 #   array1 value, and return that result.
-def merge_multiple_passes(array1, array2)
+def merge(array1, array2)
   index2 = 0
   result = []
 
@@ -116,12 +116,12 @@ TESTS = [
   { input: [[1, 4, 5], []],
     expected_output: [1, 4, 5] }
   # , { input: [big_array1, big_array2],
-  #   expected_output: merge_multiple_passes(big_array1, big_array2) }
+  #   expected_output: merge(big_array1, big_array2) }
 ].freeze
 
 run_tests('merge_one_pass', TESTS, ->(input) { merge_one_pass(*input) })
-run_tests('merge_multiple_passes', TESTS,
-          ->(input) { merge_multiple_passes(*input) })
+run_tests('merge', TESTS,
+          ->(input) { merge(*input) })
 
 benchmark_report(
   2, 200, TESTS,
@@ -129,7 +129,7 @@ benchmark_report(
     { label: 'one_pass',
       method: ->(input) { merge_one_pass(*input) } },
     { label: 'multiple_passes',
-      method: ->(input) { merge_multiple_passes(*input) } }
+      method: ->(input) { merge(*input) } }
   ]
 )
 
