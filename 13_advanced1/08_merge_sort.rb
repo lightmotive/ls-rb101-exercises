@@ -124,30 +124,30 @@ end
 #         i = i + 2 * m
 #     m = m * 2
 
-def merge_bottom_up!(array, i, m, n)
-  swap_middle = i + m
-  swap_end = [i + 2 * m - 1, n - 1].min
+def merge_in_place!(array, swap_start_idx, swap_size)
+  swap_middle = swap_start_idx + swap_size
+  swap_end = [swap_start_idx + 2 * swap_size - 1, array.size - 1].min
 
-  first_set = array[i...swap_middle]
+  first_set = array[swap_start_idx...swap_middle]
   second_set = array[swap_middle..swap_end]
 
-  array[i..swap_end] = merge(first_set, second_set)
+  array[swap_start_idx..swap_end] = merge(first_set, second_set)
 end
 
 def merge_sort_non_recursive(array)
   array = array.dup
-  m = 1
-  n = array.size
+  swap_size = 1
 
-  while m < n
-    i = 0
+  while swap_size < array.size
+    swap_start_idx = 0
 
-    while i < n - m
-      merge_bottom_up!(array, i, m, n)
+    while swap_start_idx < array.size - swap_size
+      merge_in_place!(array, swap_start_idx, swap_size)
 
-      i += 2 * m
+      swap_start_idx += 2 * swap_size
     end
-    m *= 2
+
+    swap_size *= 2
   end
 
   array
