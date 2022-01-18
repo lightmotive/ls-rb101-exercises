@@ -174,14 +174,14 @@ TESTS = [
   #   expected_output: merge_multiple_passes(big_array1, big_array2) }
 ].freeze
 
-run_tests('merge_sort', TESTS, ->(input) { merge_sort(input) })
+run_tests('merge_sort_recursive', TESTS, ->(input) { merge_sort(input) })
 run_tests('merge_sort_bottom_up', TESTS,
           ->(input) { merge_sort_bottom_up(input) })
 
 benchmark_report(
   2, 200, TESTS,
   [
-    { label: 'merge_sort',
+    { label: 'merge_sort_recursive',
       method: ->(input) { merge_sort(input) } },
     { label: 'merge_sort_bottom_up',
       method: ->(input) { merge_sort_bottom_up(input) } }
