@@ -111,23 +111,46 @@ def merge_sort(array)
   merge(arr1, arr2)
 end
 
-# Further exploration: perform merge sort non-recursively.
+# Further exploration: perform merge sort non-recursively ("bottom-up").
 # *A*
-# Src: https://charlesreid1.com/wiki/Merge_Sort/Pseudocode#Nonrecursive_.28Bottom-Up.29_Merge_Sort_Algorithm_Pseudocode
-# function merge_sort(S) {
-#     src = S
-#     dest = (empty array, size of S)
-#     for k in log2(length S) {
-#         we have runs of length i = 2^k
-#         we are iterating over pairs of runs of length i = 2^k to sort them
-#         this iteration assembles runs of length 2*i = 2^{k+1}
-#         for j in range 0 to n, taking strides of size 2*i {
-#             merge(src, dest, j, i)  // j = where to start, i = stride size, this merges these two halves
-#         }
-#     }
-# }
-def merge_sort_non_recursive(array)
+# Src: https://algorithmist.com/wiki/Merge_sort
+# Input: array a[] indexed from 0 to n-1.
+#
+# m = 1
+# while m < n do
+#     i = 0
+#     while i < n-m do
+#         merge subarrays a[i..i+m-1] and a[i+m .. min(i+2*m-1,n-1)] in-place.
+#         i = i + 2 * m
+#     m = m * 2
 
+def merge_bottom_up!(array, i, m, n)
+  swap_middle = i + m
+  swap_end = [i + 2 * m - 1, n - 1].min
+
+  first_set = array[i...swap_middle]
+  second_set = array[swap_middle..swap_end]
+
+  array[i..swap_end] = merge(first_set, second_set)
+end
+
+def merge_sort_non_recursive(array)
+  array = array.dup
+  m = 1
+  n = array.size
+
+  while m < n
+    i = 0
+
+    while i < n - m
+      merge_bottom_up!(array, i, m, n)
+
+      i += 2 * m
+    end
+    m *= 2
+  end
+
+  array
 end
 
 require_relative '../../ruby-common/test'
@@ -154,9 +177,9 @@ run_tests('merge_sort_non_recursive', TESTS,
 benchmark_report(
   2, 200, TESTS,
   [
-    { label: 'one_pass',
+    { label: 'merge_sort',
       method: ->(input) { merge_sort(input) } },
-    { label: 'multiple_passes',
+    { label: 'merge_sort_non_recursive',
       method: ->(input) { merge_sort_non_recursive(input) } }
   ]
 )
