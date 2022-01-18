@@ -144,7 +144,7 @@ def merge_pass!(array, merge_size)
   end
 end
 
-def merge_sort_non_recursive(array)
+def merge_sort_bottom_up(array)
   array = array.dup
   merge_size = 1
 
@@ -175,15 +175,15 @@ TESTS = [
 ].freeze
 
 run_tests('merge_sort', TESTS, ->(input) { merge_sort(input) })
-run_tests('merge_sort_non_recursive', TESTS,
-          ->(input) { merge_sort_non_recursive(input) })
+run_tests('merge_sort_bottom_up', TESTS,
+          ->(input) { merge_sort_bottom_up(input) })
 
 benchmark_report(
   2, 200, TESTS,
   [
     { label: 'merge_sort',
       method: ->(input) { merge_sort(input) } },
-    { label: 'merge_sort_non_recursive',
-      method: ->(input) { merge_sort_non_recursive(input) } }
+    { label: 'merge_sort_bottom_up',
+      method: ->(input) { merge_sort_bottom_up(input) } }
   ]
 )
