@@ -11,7 +11,8 @@
 # - Math rule: every positive Rational Number can be written as an Egyptian
 #   fraction.
 # Mental model:
-#   A series of unique unit fractions will add up to the input Rational Number.
+#   A sum of unique unit fractions starting with a fraction that's smaller than
+#   or equal to the input will equal the input Rational Number.
 
 # * E *
 # egyptian(Rational(2, 1)) == [1, 2, 3, 6]
@@ -30,7 +31,7 @@
 # Input: An output from the `egyptian` method.
 # Output: A Rational Number.
 # Mental model:
-#   The input list of denominators with a *1* numerator will add up to a
+#   The input list of denominators with a *1* numerator will add up to the
 #   Rational Number output.
 
 # * E *
