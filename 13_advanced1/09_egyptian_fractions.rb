@@ -89,3 +89,18 @@ p egyptian(Rational(5, 8)) == [2, 8]
 # * A *
 # Given an array of Egyptian Fraction denominators, return a sum of
 # 1/denominator values.
+
+def egyptian_reverse(denominators)
+  denominators.reduce(Rational(0, 1)) do |rational, denominator|
+    rational + Rational(1, denominator)
+  end
+end
+
+p egyptian_reverse(egyptian(Rational(1, 2))) == Rational(1, 2)
+p egyptian_reverse(egyptian(Rational(3, 4))) == Rational(3, 4)
+p egyptian_reverse(egyptian(Rational(39, 20))) == Rational(39, 20)
+p egyptian_reverse(egyptian(Rational(127, 130))) == Rational(127, 130)
+p egyptian_reverse(egyptian(Rational(5, 7))) == Rational(5, 7)
+p egyptian_reverse(egyptian(Rational(1, 1))) == Rational(1, 1)
+p egyptian_reverse(egyptian(Rational(2, 1))) == Rational(2, 1)
+p egyptian_reverse(egyptian(Rational(3, 1))) == Rational(3, 1)
