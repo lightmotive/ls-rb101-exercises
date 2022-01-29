@@ -33,7 +33,7 @@
 #   (This is the default behavior assuming method doesn't provide an option to
 #   specify the starting fraction.)
 # denominators = []
-# while unit_fraction_sum <= rational
+# while unit_fraction_sum < rational
 #   denominator += 1
 #   new_sum = unit_fraction_sum + Rational(1, denominator)
 #   if new_sum <= rational
