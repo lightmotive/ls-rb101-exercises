@@ -41,6 +41,28 @@
 #     denominators << denominator
 # return denominators
 
+def egyptian(rational)
+  unit_fraction_sum = Rational(0, 1)
+  denominator = 0
+  denominators = []
+
+  while (unit_fraction_sum <=> rational).negative?
+    denominator += 1
+    new_sum = unit_fraction_sum + Rational(1, denominator)
+    if (new_sum <=> rational) < 1
+      unit_fraction_sum = new_sum
+      denominators << denominator
+    end
+  end
+
+  denominators
+end
+
+p egyptian(Rational(2, 1)) == [1, 2, 3, 6]
+p egyptian(Rational(137, 60)) == [1, 2, 3, 4, 5]
+p egyptian(Rational(3, 1)) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 230, 57_960]
+p egyptian(Rational(5, 8)) == [2, 8]
+
 #
 # ** PEDAC: egyptian_reverse method **
 #
