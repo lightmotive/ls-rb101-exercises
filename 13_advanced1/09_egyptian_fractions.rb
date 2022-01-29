@@ -27,32 +27,35 @@
 # Store each denominator in an Array.
 
 # * A *
-# Given a Rational object `rational`:
+# Given a Rational object `target_rational`:
 # unit_fraction_sum = Rational(0, 1)
 # denominator = 0
 #   (This is the default behavior assuming method doesn't provide an option to
 #   specify the starting fraction.)
 # denominators = []
-# while unit_fraction_sum < rational
+# while unit_fraction_sum < target_rational
 #   denominator += 1
 #   new_sum = unit_fraction_sum + Rational(1, denominator)
-#   if new_sum <= rational
+#   if new_sum <= target_rational
 #     unit_fraction_sum = new_sum
 #     denominators << denominator
 # return denominators
 
-def egyptian(rational)
-  unit_fraction_sum = Rational(0, 1)
-  denominator = 0
+# Launch School's algorithm: subtract Rational values from target_rational
+# until it reaches 0. It requires slightly less code.
+
+def egyptian(target_rational)
   denominators = []
 
-  while (unit_fraction_sum <=> rational).negative?
-    denominator += 1
-    new_sum = unit_fraction_sum + Rational(1, denominator)
-    if (new_sum <=> rational) < 1
-      unit_fraction_sum = new_sum
-      denominators << denominator
+  unit_denominator = 1
+  until target_rational.zero?
+    unit_fraction = Rational(1, unit_denominator)
+    if unit_fraction <= target_rational
+      target_rational -= unit_fraction
+      denominators << unit_denominator
     end
+
+    unit_denominator += 1
   end
 
   denominators
@@ -91,8 +94,8 @@ p egyptian(Rational(5, 8)) == [2, 8]
 # 1/denominator values.
 
 def egyptian_reverse(denominators)
-  denominators.reduce(Rational(0, 1)) do |rational, denominator|
-    rational + Rational(1, denominator)
+  denominators.reduce(Rational(0)) do |sum, denominator|
+    sum + Rational(1, denominator)
   end
 end
 
