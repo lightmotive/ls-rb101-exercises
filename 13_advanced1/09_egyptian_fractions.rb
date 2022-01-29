@@ -6,6 +6,12 @@
 # Input: Rational Number
 # Output: Array of Unit Fraction denominators that make up the Egyptian Fraction
 #   that represents the Input.
+# Rules:
+# - Assumption: the Rational Number input will always be positive.
+# - Math rule: every positive Rational Number can be written as an Egyptian
+#   fraction.
+# Mental model:
+#   A series of unique unit fractions will add up to the input Rational Number.
 
 # * E *
 # egyptian(Rational(2, 1)) == [1, 2, 3, 6]
@@ -24,8 +30,8 @@
 # Input: An output from the `egyptian` method.
 # Output: A Rational Number.
 # Mental model:
-#   Convert an Egyptian Fraction's Unit Fractions denominators into
-#   a Rational Number.
+#   The input list of denominators with a *1* numerator will add up to a
+#   Rational Number output.
 
 # * E *
 # egyptian_reverse(egyptian(Rational(1, 2))) == Rational(1, 2)
