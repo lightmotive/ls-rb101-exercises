@@ -57,7 +57,7 @@ def pair_match_regexp_strings
   PAIRS.map do |pair|
     open_char, close_char = pair
     boundary_start = pair_char_for_regexp(open_char)
-    content = "(?>[^#{regexp_set_escaped(pair).join}]|(\\g<0>))*"
+    content = "(?>[^#{regexp_set_escaped(pair).join}]|(\\g<1>))*"
     boundary_end = pair_char_for_regexp(close_char)
     "#{boundary_start}#{content}#{boundary_end}"
   end
