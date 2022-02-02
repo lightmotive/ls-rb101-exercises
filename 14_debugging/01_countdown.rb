@@ -4,12 +4,12 @@
 # that our program successfully counts down from 10 to 1.
 
 def decrease(counter)
-  counter -= 1
+  counter - 1
 end
 
 counter = 10
 
-10.times do
+counter.times do
   puts counter
   # decrease(counter)
   # The problem is with line 14 above: `counter` is not decremented
