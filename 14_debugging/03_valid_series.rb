@@ -12,7 +12,14 @@ def valid_series?(nums)
   return false if nums.sum != 47
 
   odd_count = nums.count { |n| n.odd? }
-  odd_count = 3 ? true : false
+  # The problem is this line:
+  # odd_count = 3 ? true : false
+  # It is reassigning `odd_count` to `3 ? true : false`, which always evaluates
+  # to *true* because *3* is truthy, so the ternary conditional expression
+  # result is *true*.
+  # To fix the problem, be explicit with the intent to evaluate whether
+  # `odd_count` equals *3*. This expression fixes the issue:
+  odd_count == 3
 end
 
 p valid_series?([5, 6, 2, 7, 3, 12, 4, 8])        # should return true
