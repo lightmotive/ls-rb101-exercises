@@ -46,11 +46,11 @@ remaining_cards_score = deck.reduce(0) do |sum, (_, remaining_cards)|
   # to a new variable for later use.
   # Mutation is generally not preferable when unnecessary, so here's the best
   # solution:
-  remaining_cards_scores = remaining_cards.map do |card|
+  scores = remaining_cards.map do |card|
     score(card)
   end
 
-  sum + remaining_cards_scores.sum
+  sum + scores.sum
   # Note that we renamed the outer scope variable `sum` to
   # `remaining_cards_score` to avoid variable shadowing.
 end
