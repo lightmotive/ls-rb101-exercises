@@ -10,11 +10,17 @@
 # is missing a key component: a condition that stops recursion.
 # To fix, immediately return from `move` when `n` equals zero.
 
-def move(n, from_array, to_array)
-  return nil if n.zero?
+# Also, it's good to conventionally indicate that `move` mutates the arguments;
+# rename `move` to `move!`.
+
+# Finally, the `n` parameter could communicate intent better with a longer name.
+# We'll call it `count` instead.
+
+def move!(count, from_array, to_array)
+  return nil if count.zero?
 
   to_array << from_array.shift
-  move(n - 1, from_array, to_array)
+  move!(count - 1, from_array, to_array)
 end
 
 # Example
@@ -22,7 +28,7 @@ end
 todo = ['study', 'walk the dog', 'coffee with Tom']
 done = ['apply sunscreen', 'go to the beach']
 
-move(2, todo, done)
+move!(2, todo, done)
 
 p todo == ['coffee with Tom']
 p done == ['apply sunscreen', 'go to the beach', 'study', 'walk the dog']
