@@ -6,12 +6,16 @@
 # Once you get the program to run and produce a `sum`, you might notice that the
 # sum is off: It's lower than it should be. Why is that?
 
-cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace]
+CARDS = [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace].freeze
 
-deck = { hearts: cards,
-         diamonds: cards,
-         clubs: cards,
-         spades: cards }
+# First problem: the deck hash values all point to the same array.
+# When the program `shuffle`s and `pop`s cards, it's shuffling and popping
+# from the same array for each suit.
+# What we want to do is `dup` the cards array for each suit:
+deck = { hearts: CARDS.dup,
+         diamonds: CARDS.dup,
+         clubs: CARDS.dup,
+         spades: CARDS.dup }
 
 def score(card)
   case card
@@ -22,6 +26,19 @@ def score(card)
   else card
   end
 end
+
+def cards_score(cards)
+  cards.map { |card| score(card) }.sum
+end
+
+def card_set_score(card_set)
+  card_set.reduce(0) do |sum, cards|
+    sum + cards_score(cards)
+  end
+end
+
+# For testing:
+deck_score = card_set_score(deck.values)
 
 # Pick one random card per suit
 
@@ -40,7 +57,7 @@ remaining_cards_score = deck.reduce(0) do |sum, (_, remaining_cards)|
   # end
 
   # sum += remaining_cards.sum
-  # The problem: `remaining_cards` on line 42 still contains the cards,
+  # Another problem: `remaining_cards` on line 42 still contains the cards,
   # including suits. The intent is to map `remaining_cards` to the associated
   # scores. Line 38 creates that new mapped collection, but doesn't assign it
   # to a new variable for later use.
@@ -55,4 +72,6 @@ remaining_cards_score = deck.reduce(0) do |sum, (_, remaining_cards)|
   # `remaining_cards_score` to avoid variable shadowing.
 end
 
-puts remaining_cards_score
+player_score = player_cards.map { |card| score(card) }.sum
+
+puts deck_score == player_score + remaining_cards_score
