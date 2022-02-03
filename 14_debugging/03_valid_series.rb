@@ -18,7 +18,8 @@ def valid_series?(nums)
   # to *true* because *3* is truthy, so the ternary conditional expression
   # result is *true*.
   # To fix the problem, be explicit with the intent to evaluate whether
-  # `odd_count` equals *3*. This expression fixes the issue:
+  # `odd_count` equals *3*. Replacing that expression with this one fixes the
+  # issue:
   odd_count == 3
 end
 
