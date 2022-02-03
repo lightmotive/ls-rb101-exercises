@@ -17,7 +17,7 @@
 # We'll call it `count` instead.
 
 def move!(count, from_array, to_array)
-  return nil if count.zero?
+  return if count.zero? || from_array.empty?
 
   to_array << from_array.shift
   move!(count - 1, from_array, to_array)
