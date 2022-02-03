@@ -32,3 +32,9 @@ move!(2, todo, done)
 
 p todo == ['coffee with Tom']
 p done == ['apply sunscreen', 'go to the beach', 'study', 'walk the dog']
+
+move!(2, todo, done)
+
+p todo == []
+p done == ['apply sunscreen', 'go to the beach', 'study', 'walk the dog',
+           'coffee with Tom']
