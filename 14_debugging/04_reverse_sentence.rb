@@ -11,7 +11,16 @@ def reverse_sentence(sentence)
 
   i = 0
   while i < words.length
-    reversed_words = words[i] + reversed_words
+    # The problem is with this line:
+    # reversed_words = words[i] + reversed_words
+    #   `words[i]` returns a String object. **String#+** doesn't accept an
+    #   Array-type argument. The line's intent is intuitively clear, but it's
+    #   using the wrong syntax.
+    # One can rewrite the line like this to fix the problem:
+    #   reversed_words = [words[i]] + reversed_words
+    # However, it would be more succinct to write this:
+    reversed_words.prepend(words[i])
+    # **Array#prepend** is an alias to **Array#unshift**.
     i += 1
   end
 
