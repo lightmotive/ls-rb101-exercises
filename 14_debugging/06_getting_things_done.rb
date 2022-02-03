@@ -6,7 +6,13 @@
 #
 # What does this error mean and why does it happen?
 
+# Ruby raises the **SystemStackError** exception because the recursive method
+# is missing a key component: a condition that stops recursion.
+# To fix, immediately return from `move` when `n` equals zero.
+
 def move(n, from_array, to_array)
+  return nil if n.zero?
+
   to_array << from_array.shift
   move(n - 1, from_array, to_array)
 end
