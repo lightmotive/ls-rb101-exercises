@@ -8,10 +8,10 @@
 
 cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace]
 
-deck = { :hearts   => cards,
-         :diamonds => cards,
-         :clubs    => cards,
-         :spades   => cards }
+deck = { hearts: cards,
+         diamonds: cards,
+         clubs: cards,
+         spades: cards }
 
 def score(card)
   case card
@@ -34,12 +34,25 @@ end
 
 # Determine the score of the remaining cards in the deck
 
-sum = deck.reduce(0) do |sum, (_, remaining_cards)|
-  remaining_cards.map do |card|
+remaining_cards_score = deck.reduce(0) do |sum, (_, remaining_cards)|
+  # remaining_cards.map do |card|
+  #   score(card)
+  # end
+
+  # sum += remaining_cards.sum
+  # The problem: `remaining_cards` on line 42 still contains the cards,
+  # including suits. The intent is to map `remaining_cards` to the associated
+  # scores. Line 38 creates that new mapped collection, but doesn't assign it
+  # to a new variable for later use.
+  # Mutation is generally not preferable when unnecessary, so here's the best
+  # solution:
+  remaining_cards_scores = remaining_cards.map do |card|
     score(card)
   end
 
-  sum += remaining_cards.sum
+  sum + remaining_cards_scores.sum
+  # Note that we renamed the outer scope variable `sum` to
+  # `remaining_cards_score` to avoid variable shadowing.
 end
 
-puts sum
+puts remaining_cards_score
