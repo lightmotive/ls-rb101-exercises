@@ -9,13 +9,13 @@
 
 password = nil
 
-def set_password
-  puts 'What would you like your password to be?'
-  new_password = gets.chomp
-  password = new_password
-end
+# def set_password
+#   puts 'What would you like your password to be?'
+#   new_password = gets.chomp
+#   password = new_password
+# end
 
-def verify_password
+def verify_password(password)
   puts '** Login **'
   print 'Password: '
   input = gets.chomp
@@ -35,8 +35,19 @@ def verify_password
   end
 end
 
-if !password
-  set_password
+def password_prompt
+  puts 'What would you like your password to be?'
+  gets.chomp
 end
 
-verify_password
+password ||= password_prompt
+
+verify_password(password)
+
+# The solution:
+# First of all, a real program would use a secure credential service for
+# authentication purposes, then store an authentication token locally instead
+# of the actual password.
+# But for this example's purposes, we should set the `main`-scoped `password`
+# variable using a method result, and then pass `password` to the
+# `verify_password` method.
