@@ -20,6 +20,14 @@ def verify_password
   print 'Password: '
   input = gets.chomp
 
+  # The problem is on the following line: `password` is not defined within the
+  # `verify_assword` method's scope.
+  #
+  # `password` is initialized in the `main` program scope (line 10 above), but
+  # it is not assigned anywhere. A programmer that's unfamiliar with Ruby might
+  # think it's assigned in the `set_password` method, but methods in Ruby create
+  # a new local variable scope that cannot access local variables that were
+  # initialized outside that scope.
   if input == password
     puts 'Welcome to the inside!'
   else
