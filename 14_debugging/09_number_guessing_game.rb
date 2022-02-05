@@ -40,3 +40,10 @@ def guess_number(max_number, max_attempts)
 end
 
 guess_number(10, 3)
+
+# Program issues:
+# - The game doesn't end when max attempts is reached.
+# - The game doesn't exit upon winning.
+
+# UX recommendations:
+# - Indicate the number range and number of attempts remaining.
