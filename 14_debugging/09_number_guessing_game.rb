@@ -11,31 +11,37 @@ def valid_integer?(string)
   string.to_i.to_s == string
 end
 
+def clear_console
+  system('clear') || system('cls')
+end
+
 def guess_number(max_number, max_attempts)
   winning_number = (1..max_number).to_a.sample
   attempts = 0
 
   loop do
-    attempts += 1
-    break if attempts > max_attempts
+    break if attempts >= max_attempts
 
     input = nil
+
     until valid_integer?(input)
       print 'Make a guess: '
       input = gets.chomp
     end
+    attempts += 1
 
     guess = input.to_i
 
-    if guess == winning_number
-      puts 'Yes! You win.'
-    else
-      puts 'Nope. Too small.' if guess < winning_number
-      puts 'Nope. Too big.'   if guess > winning_number
+    break (puts 'Yes! You win.') if guess == winning_number
+    next (puts 'Nope. Too small.') if guess < winning_number
+    next (puts 'Nope. Too big.') if guess > winning_number
+  end
 
-      # Try again:
-      guess_number(max_number, max_attempts)
-    end
+  # Play again?
+  print 'Would you like to play again? '
+  if gets.strip.downcase.start_with?('y')
+    clear_console
+    guess_number(max_number, max_attempts)
   end
 end
 
