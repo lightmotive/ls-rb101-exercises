@@ -8,9 +8,10 @@
 # enrolled in an awesome developer school, so he asks you to have a look.
 
 # Term frequency - inverse document frequency:
-# A measure of how important a term is to a document in a collection of documents
-# (the importance increases proportionally to the term frequency in the document,
-# but decreases with the frequency of the word across documents)
+# A measure of how important a term is to a document in a collection of
+# documents (the importance increases proportionally to the term frequency
+# in the document, but decreases with the frequency of the word across
+# documents).
 
 def tfidf(term, document, documents)
   tf(term, document) * idf(term, documents)
