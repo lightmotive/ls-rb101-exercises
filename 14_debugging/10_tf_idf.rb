@@ -14,7 +14,10 @@
 # documents).
 
 def tfidf(term, document, documents)
-  tf(term, document) * idf(term, documents)
+  tf = tf(term, document)
+  idf = idf(term, documents)
+
+  tf * idf
 end
 
 # Term frequency (simple version):
@@ -33,7 +36,11 @@ def idf(term, documents)
   number_of_documents = documents.length
   number_of_documents_with_term = documents.count { |d| tf(term, d) > 0 }
 
-  Math.log(number_of_documents / number_of_documents_with_term)
+  # The problem: the code was using Integer division, which always returns
+  # an integer.
+  # The solution is to use Ruby's Rational class for precise division, then
+  # convert the Rational return value Float:
+  Math.log(Rational(number_of_documents, number_of_documents_with_term).to_f)
 end
 
 # Very simple example
@@ -63,6 +70,7 @@ documents = [document1, document2, document3]
 # For the term 'quantum mechanics', on the other hand, you only want to return document1.
 
 # expected outputs:
+
 puts tfidf('cat', document1, documents) # ~ 1.2
 puts tfidf('cat', document2, documents) # ~ 1.6
 puts tfidf('cat', document3, documents) # 0
