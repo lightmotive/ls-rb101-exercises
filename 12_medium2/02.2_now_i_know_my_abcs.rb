@@ -17,9 +17,16 @@
 # Input: String
 # Output: Boolean
 
+# Rules:
+# - Case-insensitive comparison.
+
 # Mental model:
 # Given a set of letter pairs, check whether a string can be spelled with no
 # more than one letter from each pair.
+
+# Data structure:
+# Store the letter pairs (blocks) in an array.
+# Convert the method parameter to an array of chars.
 
 # Examples:
 p block_word?('BATCH') == true
