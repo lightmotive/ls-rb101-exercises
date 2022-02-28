@@ -41,6 +41,35 @@
 #   - Remove the sub-array containing the matching char.
 # - Return `true`
 
+LETTER_BLOCKS = [
+  'B:O', 'X:K', 'D:Q', 'C:P', 'N:A',
+  'G:T', 'R:E', 'F:S', 'J:W', 'H:U',
+  'V:I', 'L:Y', 'Z:M'
+].freeze
+
+def char_processed(char)
+  char.downcase
+end
+
+def blocks(blocks = LETTER_BLOCKS)
+  blocks.map do |letters|
+    letters.split(':').map { |letter| char_processed(letter) }
+  end
+end
+
+def block_word?(word)
+  letter_blocks = blocks
+
+  word.chars.map { |char| char_processed(char) }.each do |char|
+    block_index = letter_blocks.index { |block| block.include?(char) }
+    return false if block_index.nil?
+
+    letter_blocks.delete_at(block_index)
+  end
+
+  true
+end
+
 # Examples:
 p block_word?('BATCH') == true
 p block_word?('BUTCH') == false
