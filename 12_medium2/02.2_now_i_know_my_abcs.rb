@@ -14,60 +14,38 @@
 # Write a method that returns true if the word passed in as an argument can be
 # spelled from this set of blocks, false otherwise.
 
+# ********************************************************
+# Re-implement more idiomatic solution with far less code:
+# ********************************************************
+
 # Input: String
-# Output: Boolean
+# Output: Boolean based on verifying that all letter blocks were used only once.
 
 # Rules:
 # - Case-insensitive comparison.
 
 # Mental model:
-# Given a set of letter pairs, check whether a string can be spelled with no
-# more than one letter from each pair.
+# Given a set of letter pairs, ensure that each pair is used only once within
+# the input string.
 
 # * Data structure *
-# Store the letter pairs (blocks) in an array of arrays.
-# Convert the method parameter to an array of chars.
+# - Store the letter pairs in a way that Ruby can easily use them for counting
+#   letter occurrences in a string. Then, one can analyze the string as-is.
 
 # * Algorithm *
 # Overview:
-# Create a constant named `LETTER_BLOCKS` to store letter pairs as array of
-# 2-char arrays.
+# Create a `BLOCKS` constant stores each letter pair as a string.
 
 # Given a `word`:
-# - Initialize blocks from constant (Object#dup) as `letter_blocks`
-# - Iterate through each input char
-#   - Find the index of the sub-array containing the matching char.
-#     - If not found, return `false`.
-#   - Remove the sub-array containing the matching char.
-# - Return `true`
+# - Convert `word` to uppercase.
+# - Return a return value indicating whether a block's letter set occurs no
+#   more than once in the string.
 
-LETTER_BLOCKS = [
-  'B:O', 'X:K', 'D:Q', 'C:P', 'N:A',
-  'G:T', 'R:E', 'F:S', 'J:W', 'H:U',
-  'V:I', 'L:Y', 'Z:M'
-].freeze
-
-def char_processed(char)
-  char.downcase
-end
-
-def blocks(blocks = LETTER_BLOCKS)
-  blocks.map do |letters|
-    letters.split(':').map { |letter| char_processed(letter) }
-  end
-end
+BLOCKS = %w[BO XK DQ CP NA GT RE FS JW HU VI LY ZM].freeze
 
 def block_word?(word)
-  letter_blocks = blocks
-
-  word.chars.map { |char| char_processed(char) }.each do |char|
-    block_index = letter_blocks.index { |block| block.include?(char) }
-    return false if block_index.nil?
-
-    letter_blocks.delete_at(block_index)
-  end
-
-  true
+  word = word.upcase
+  BLOCKS.none? { |letters| word.count(letters) > 1 }
 end
 
 # Examples:
