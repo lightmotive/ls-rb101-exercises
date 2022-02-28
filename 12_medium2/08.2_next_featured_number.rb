@@ -49,12 +49,10 @@ def max_reached?(integer)
 end
 
 def featured(integer)
+  integer += 1
   return NO_NEXT_FEATURED_NUMBER_MESSAGE if max_reached?(integer)
 
-  original = integer
-
   integer += 1 until increment?(integer)
-  integer += 14 if integer == original
   integer += 14 until max_reached?(integer) || featured?(integer)
 
   max_reached?(integer) ? NO_NEXT_FEATURED_NUMBER_MESSAGE : integer
