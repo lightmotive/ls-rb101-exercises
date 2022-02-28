@@ -24,9 +24,22 @@
 # Given a set of letter pairs, check whether a string can be spelled with no
 # more than one letter from each pair.
 
-# Data structure:
-# Store the letter pairs (blocks) in an array.
+# * Data structure *
+# Store the letter pairs (blocks) in an array of arrays.
 # Convert the method parameter to an array of chars.
+
+# * Algorithm *
+# Overview:
+# Create a constant named `LETTER_BLOCKS` to store letter pairs as array of
+# 2-char arrays.
+
+# Given a `word`:
+# - Initialize blocks from constant (Object#dup) as `letter_blocks`
+# - Iterate through each input char
+#   - Find the index of the sub-array containing the matching char.
+#     - If not found, return `false`.
+#   - Remove the sub-array containing the matching char.
+# - Return `true`
 
 # Examples:
 p block_word?('BATCH') == true
