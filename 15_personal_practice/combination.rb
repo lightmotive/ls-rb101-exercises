@@ -15,29 +15,35 @@
 #
 # Given array and c_length, e.g., [12, 13, 7, 5] and 3:
 #
+# combos = []
+# start_idx = 0
+# head_count = c_length
+#
 # [12, 13, 7] -- [0, 1, 2, -]
+#   - tail_offset_idx = start_idx + head_count
+#   - tail_count = c_length - head_count
+#   - combos << [start_idx, head_count] + [tail_offset_idx, tail_count]
+#   - head_count -= 1
 # [12, 13, 5] -- [0, 1, -, 3]
+#   - tail_offset_idx = start_idx + head_count
+#   - tail_count = c_length - head_count
+#   - combos << [start_idx, head_count] + [tail_offset_idx, tail_count]
+#   - head_count -= 1
 # [12, 7, 5]  -- [0, -, 2, 3]
+#   - tail_offset_idx = start_idx + head_count
+#   - combos << [start_idx, head_count] + [tail_offset_idx, tail_count]
+#   - head_count -= 1
 # [13, 7, 5]  -- [-, 1, 2, 3 (last)]
+#   - tail_offset_idx = start_idx + head_count
+#   - combos << [start_idx, head_count] + [tail_offset_idx, tail_count]
+#   - head_count -= 1
 #
-# ***
-#
-# - combos = []
-# - FROM 0 to (size - c_length): start_idx
-#   - combo = [start_idx, take c_length - 1]
-#   - FROM start_idx + (c_length - 1) + 1: tail_idx
-#     - combo.concat(array[tail_idx])
-#   - combos << combo
-# - Return combos
+# Return combos
+
+require 'pry'
 
 def combination(array, c_length)
-  # - combos = []
-  # - FROM 0 to (size - c_length): start_idx
-  #   - combo = [start_idx, take c_length - 1]
-  #   - FROM start_idx + (c_length - 1) + 1: tail_idx
-  #     - combo.concat(array[tail_idx])
-  #   - combos << combo
-  # - Return combos
+  # ...
 end
 
 p combination([12, 13, 7, 5], 2) == [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]]
