@@ -18,17 +18,18 @@ Values   -- Indices
 combos = []
 tail_size = c_count - 1
 (0..(array.size - c_count)): start_idx
-  (start_idx...array.size - tail_size): tail_start_idx
+  ((start_idx + 1)...(array.size - tail_size)): tail_start_idx
     combos << (array[start_idx] + array[tail_start_idx, tail_size])
 =end
 
 # combination([12, 13, 7, 5], 3) | array, c_count
 =begin
-[12, 13, 7]
-[12, 13, 5]
-[12, 7, 5]
-[13, 7, 5]
+[12, 13, 7] -- [0, 1, 2, -]
+[12, 13, 5] -- [0, 1, -, 3]
+[12, 7, 5]  -- [0, -, 2, 3]
+[13, 7, 5]  -- [-, 1, 2, 3]
+
 =end
 
-p combination([12, 13, 7, 5], 2) == [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]]
-p combination([12, 13, 7, 5], 3) == [[12, 13, 7], [12, 13, 5], [12, 7, 5], [13, 7, 5]]
+p combination([12, 13, 7, 5], 2).sort == [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]].sort
+p combination([12, 13, 7, 5], 3).sort == [[12, 13, 7], [12, 13, 5], [12, 7, 5], [13, 7, 5]].sort
