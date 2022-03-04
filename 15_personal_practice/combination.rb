@@ -15,10 +15,10 @@
 # [7, 5]   -- [-, -, 2, 3] -- Iteration ends
 # ***
 # combos = []
-# tail_size = c_count - 1
+# middle_size = c_count - 1
 # (0..(array.size - c_count)): start_idx
-#   ((start_idx + 1)...(array.size - tail_size)): tail_start_idx
-#     combos << (array[start_idx] + array[tail_start_idx, tail_size])
+#   ((start_idx + 1)...(array.size - middle_size)): middle_start_idx
+#     combos << (array[start_idx] + array[middle_start_idx, middle_size])
 
 # combination([12, 13, 7, 5], 3) | array, c_count
 
@@ -29,27 +29,61 @@
 # start_idx = 1
 # [13, 7, 5]  -- [-, 1, 2, 3]
 # ***
-# tail_size = c_count - 2
+# middle_size = c_count - 2
 # (0..(array.size - c_count)): start_idx
-#   ((start_idx + 1)...(array.size - tail_size): tail_start_idx
-#     ((tail_start_idx + tail_size + 1)...array.size): tail_end_idx
-#       combos << (array[start_idx] + array[tail_start_idx, tail_size] + array[tail_end_idx])
+#   1.upto(middle_offset_max): middle_offset (possible middle starting points, with a minimum of 1)
+#     ((start_idx + middle_offset + middle_size)...array.size): end_idx
+#       combos << ([array[start_idx]] + array[start_idx + middle_offset, middle_size] + [array[end_idx]])
 
-p combination([12, 13, 7, 5], 2).sort == [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]].sort
-p combination([12, 13, 7, 5], 3).sort == [[12, 13, 7], [12, 13, 5], [12, 7, 5], [13, 7, 5]].sort
-p combination([12, 13, 7, 5], 4).sort == [[12, 13, 7, 5]].sort
-p combination([12, 13, 7, 5, 10, 16], 4).sort == [[12, 13, 7, 5],
-                                                  [12, 13, 7, 10],
-                                                  [12, 13, 7, 16],
-                                                  [12, 13, 5, 10],
-                                                  [12, 13, 5, 16],
-                                                  [12, 13, 10, 16],
-                                                  [12, 7, 5, 10],
-                                                  [12, 7, 5, 16],
-                                                  [12, 7, 10, 16],
-                                                  [12, 5, 10, 16],
-                                                  [13, 7, 5, 10],
-                                                  [13, 7, 5, 16],
-                                                  [13, 7, 10, 16],
-                                                  [13, 5, 10, 16],
-                                                  [7, 5, 10, 16]].sort
+def combination_middle_offset_max(array, c_count)
+  return 1 if c_count < 3
+
+  middle_size = c_count - 2
+
+  array.size - middle_size - 1
+end
+
+def combos_from_start(array, c_count, start_idx)
+  combos = []
+  middle_size = c_count - 2
+  middle_offset_max = combination_middle_offset_max(array, c_count)
+
+  1.upto(middle_offset_max) do |middle_offset|
+    ((start_idx + middle_offset + middle_size)...array.size).each do |end_idx|
+      p [start_idx, "#{start_idx + middle_offset}, #{middle_size}", end_idx]
+      combos << ([array[start_idx]] + array[start_idx + middle_offset, middle_size] + [array[end_idx]])
+    end
+  end
+
+  combos
+end
+
+def combination(array, c_count)
+  combos = []
+  # middle_offset_max = combination_middle_offset_max(array, c_count)
+
+  (0..(array.size - c_count)).each do |start_idx|
+    combos.append(*combos_from_start(array, c_count, start_idx))
+  end
+
+  combos
+end
+
+# p combination([12, 13, 7, 5], 2).sort == [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]].sort
+# p combination([12, 13, 7, 5], 3).sort == [[12, 13, 7], [12, 13, 5], [12, 7, 5], [13, 7, 5]].sort
+# p combination([12, 13, 7, 5], 4).sort == [[12, 13, 7, 5]].sort
+p combination([12, 13, 7, 5, 10, 16], 4).sort #== [[12, 13, 7, 5],
+#                                                   [12, 13, 7, 10],
+#                                                   [12, 13, 7, 16],
+#                                                   [12, 13, 5, 10],
+#                                                   [12, 13, 5, 16],
+#                                                   [12, 13, 10, 16],
+#                                                   [12, 7, 5, 10],
+#                                                   [12, 7, 5, 16],
+#                                                   [12, 7, 10, 16],
+#                                                   [12, 5, 10, 16],
+#                                                   [13, 7, 5, 10],
+#                                                   [13, 7, 5, 16],
+#                                                   [13, 7, 10, 16],
+#                                                   [13, 5, 10, 16],
+#                                                   [7, 5, 10, 16]].sort
