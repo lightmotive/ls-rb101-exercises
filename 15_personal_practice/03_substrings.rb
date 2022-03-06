@@ -12,16 +12,36 @@ def substrings_with_range(string)
   result
 end
 
-def substrings_with_slice(s)
-  0.upto(s.length - 1).flat_map do |start|
-    1.upto(s.length - start).map do |length|
-      s[start, length]
+def substrings_with_slice(string)
+  result = []
+
+  0.upto(string.length - 1).each do |start|
+    1.upto(string.length - start).each do |length|
+      result << string[start, length]
+    end
+  end
+
+  result
+end
+
+def substrings_with_map_slice(string)
+  0.upto(string.length - 1).flat_map do |start|
+    1.upto(string.length - start).map do |length|
+      string[start, length]
     end
   end
 end
 
-# `substrings_with_slice` is much clearer, but it's 10% slower than
-# `substrings_with_range`, probably due to the flatten operation.
+# `substrings_with_map_slice` is much clearer with a 10% performance penalty
+# compared to `substrings_with_range`, probably due to the mapping operations.
+
+def substrings_with_inject_slice(string)
+  (0..string.length).inject([]) do |result_outer, start|
+    (1..string.length - start).inject(result_outer) do |result, length|
+      result << string[start, length]
+    end
+  end
+end
 
 require_relative '../../ruby-common/benchmark_report'
 require_relative '../../ruby-common/test'
@@ -34,9 +54,13 @@ TESTS = [
 
 run_tests('range', TESTS, ->(input) { substrings_with_range(input) })
 run_tests('slice', TESTS, ->(input) { substrings_with_slice(input) })
+run_tests('map_slice', TESTS, ->(input) { substrings_with_map_slice(input) })
+run_tests('inject_slice', TESTS, ->(input) { substrings_with_inject_slice(input) })
 
 benchmark_report(5, 1000, TESTS,
                  [
                    { label: 'range', method: ->(input) { substrings_with_range(input) } },
-                   { label: 'slice', method: ->(input) { substrings_with_slice(input) } }
+                   { label: 'slice', method: ->(input) { substrings_with_slice(input) } },
+                   { label: 'map_slice', method: ->(input) { substrings_with_map_slice(input) } },
+                   { label: 'inject_slice', method: ->(input) { substrings_with_inject_slice(input) } }
                  ])
