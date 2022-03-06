@@ -20,8 +20,8 @@ def substrings_with_slice(s)
   end
 end
 
-require_relative 'ruby-common/benchmark_report'
-require_relative 'ruby-common/test'
+require_relative '../../ruby-common/benchmark_report'
+require_relative '../../ruby-common/test'
 
 TESTS = [
   { input: 'testing',
