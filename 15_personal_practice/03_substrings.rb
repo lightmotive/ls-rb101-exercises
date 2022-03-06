@@ -24,6 +24,9 @@ def substrings_with_slice(string)
   result
 end
 
+# `slice` is the fastest: consistently 20-30% faster than `map_slice`.
+# It's also easier to reason about than using a range.
+
 def substrings_with_map_slice(string)
   0.upto(string.length - 1).flat_map do |start|
     1.upto(string.length - start).map do |length|
@@ -32,7 +35,10 @@ def substrings_with_map_slice(string)
   end
 end
 
-# `substrings_with_map_slice` is much clearer with a 10% performance penalty
+# `map_slice` has less code, but a 20-30% performance penalty.
+# It's a more functional approach, but it's not easier to wrap one's head
+# around. The encapsulated object-oriented approach seems to make more sense
+# than a functional approach in this case.
 # compared to `substrings_with_range`, probably due to the mapping operations.
 
 def substrings_with_inject_slice(string)
@@ -42,6 +48,10 @@ def substrings_with_inject_slice(string)
     end
   end
 end
+
+# `inject_slice` eliminates the `flat_map` and `map` overhead, but it's not
+# as easy to follow because one must pass the memo object down through the
+# layers. It's also sometimes slower than `slice`.
 
 require_relative '../../ruby-common/benchmark_report'
 require_relative '../../ruby-common/test'
