@@ -20,6 +20,9 @@ def substrings_with_slice(s)
   end
 end
 
+# `substrings_with_slice` is much clearer, but it's 10% slower than
+# `substrings_with_range`, probably due to the flatten operation.
+
 require_relative '../../ruby-common/benchmark_report'
 require_relative '../../ruby-common/test'
 
