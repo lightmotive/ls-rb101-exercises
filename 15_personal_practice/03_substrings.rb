@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-def substrings_with_range(string)
-  result = []
-
-  (0...string.length).each do |start_idx|
-    (start_idx...string.length).each do |end_idx|
-      result << string[start_idx..end_idx]
-    end
-  end
-
-  result
-end
-
 def substrings_with_slice(string)
   result = []
 
@@ -26,6 +14,18 @@ end
 
 # `slice` is the fastest: consistently 20-30% faster than `map_slice`.
 # It's also easier to reason about than using a range.
+
+def substrings_with_range(string)
+  result = []
+
+  (0...string.length).each do |start_idx|
+    (start_idx...string.length).each do |end_idx|
+      result << string[start_idx..end_idx]
+    end
+  end
+
+  result
+end
 
 def substrings_with_map_slice(string)
   0.upto(string.length - 1).flat_map do |start|
