@@ -4,37 +4,32 @@
 # of `n` elements within a given array, then implement.
 
 # Implementation adapted from this source: https://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
-# Due to time constraints, I decided not to fully understand this algorithm
-# at a deep level. This is a solved problem for which I see no need to solve
-# again at this point in my career.
 
 # rubocop:disable Metrics/ParameterLists
-def combination_recurse!(input_array, combo, input_start_idx, input_end_idx,
-                         combo_idx, c_size, combos)
+def combination_recurse(input_array, c_size, input_start_idx = 0,
+                        input_end_idx = input_array.size - 1,
+                        combo = [], combo_idx = 0, combos = [])
   return combos << combo.dup if combo_idx == c_size
 
   # Replace combo_idx with all possible elements.
-  # The condition "input_end_idx-idx+1 >= c_size-combo_idx" makes sure that including one
-  # element at combo_idx will make a combination with remaining elements at
-  # remaining positions.
+  # The condition "input_end_idx-idx+1 >= c_size-combo_idx" makes sure that
+  # including one element at combo_idx will make a combination with remaining
+  # elements at remaining positions.
   idx = input_start_idx
   while (idx <= input_end_idx) &&
         ((input_end_idx - idx + 1) >= (c_size - combo_idx))
     combo[combo_idx] = input_array[idx]
-    combination_recurse!(input_array, combo, idx + 1, input_end_idx,
-                         combo_idx + 1, c_size, combos)
+    combination_recurse(input_array, c_size, idx + 1, input_end_idx,
+                        combo, combo_idx + 1, combos)
     idx += 1
   end
+
+  combos
 end
 # rubocop:enable Metrics/ParameterLists
 
 def combination(input_array, c_size)
-  combo = [0] * c_size
-  combos = []
-
-  combination_recurse!(input_array, combo, 0, input_array.size - 1, 0, c_size, combos)
-
-  combos
+  combination_recurse(input_array, c_size)
 end
 
 p combination([12, 13, 7, 5], 2) == [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]]
