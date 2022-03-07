@@ -3,8 +3,8 @@
 def substrings_with_slice(string)
   result = []
 
-  0.upto(string.length - 1).each do |start|
-    1.upto(string.length - start).each do |length|
+  (0...string.length).each do |start|
+    (1..string.length - start).each do |length|
       result << string[start, length]
     end
   end
@@ -62,15 +62,15 @@ TESTS = [
                         s st sti stin sting t ti tin ting i in ing n ng g] }
 ].freeze
 
-run_tests('range', TESTS, ->(input) { substrings_with_range(input) })
 run_tests('slice', TESTS, ->(input) { substrings_with_slice(input) })
-run_tests('map_slice', TESTS, ->(input) { substrings_with_map_slice(input) })
+run_tests('range', TESTS, ->(input) { substrings_with_range(input) })
 run_tests('inject_slice', TESTS, ->(input) { substrings_with_inject_slice(input) })
+run_tests('map_slice', TESTS, ->(input) { substrings_with_map_slice(input) })
 
 benchmark_report(5, 1000, TESTS,
                  [
-                   { label: 'range', method: ->(input) { substrings_with_range(input) } },
                    { label: 'slice', method: ->(input) { substrings_with_slice(input) } },
-                   { label: 'map_slice', method: ->(input) { substrings_with_map_slice(input) } },
-                   { label: 'inject_slice', method: ->(input) { substrings_with_inject_slice(input) } }
+                   { label: 'range', method: ->(input) { substrings_with_range(input) } },
+                   { label: 'inject_slice', method: ->(input) { substrings_with_inject_slice(input) } },
+                   { label: 'map_slice', method: ->(input) { substrings_with_map_slice(input) } }
                  ])
