@@ -10,14 +10,14 @@ def combination_recurse(input_array, c_size, start_idx = 0,
                         combo = [], combo_idx = 0, combos = [])
   return (combos << combo.dup) if combo_idx == c_size
 
-  input_end_idx = input_array.size - 1
+  end_idx = input_array.size - 1
 
   # Replace combo_idx with all possible elements.
-  # The condition "input_end_idx-idx+1 >= c_size-combo_idx" ensures that
+  # The condition "end_idx-idx+1 >= c_size-combo_idx" ensures that
   # including one element at combo_idx will make a combination with remaining
   # elements at remaining positions.
   idx = start_idx
-  while (idx <= input_end_idx) && ((input_end_idx - idx + 1) >= (c_size - combo_idx))
+  while (idx <= end_idx) && ((end_idx - idx + 1) >= (c_size - combo_idx))
     combo[combo_idx] = input_array[idx]
     combination_recurse(input_array, c_size, idx + 1, combo, combo_idx + 1, combos)
     idx += 1
