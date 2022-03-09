@@ -32,6 +32,8 @@ def combination(input_array, c_size)
   combination_recurse(input_array, c_size)
 end
 
+p combination([12], 1) == [[12]]
+p combination([12, 13, 7, 5], 1) == [[12], [13], [7], [5]]
 p combination([12, 13, 7, 5], 2) == [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]]
 p combination([12, 13, 7, 5], 3) == [[12, 13, 7], [12, 13, 5], [12, 7, 5], [13, 7, 5]]
 
