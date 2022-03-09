@@ -7,9 +7,10 @@
 
 # rubocop:disable Metrics/ParameterLists
 def combination_recurse(input_array, c_size, input_start_idx = 0,
-                        input_end_idx = input_array.size - 1,
                         combo = [], combo_idx = 0, combos = [])
-  return combos << combo.dup if combo_idx == c_size
+  return (combos << combo.dup) if combo_idx == c_size
+
+  input_end_idx = input_array.size - 1
 
   # Replace combo_idx with all possible elements.
   # The condition "input_end_idx-idx+1 >= c_size-combo_idx" makes sure that
@@ -19,8 +20,7 @@ def combination_recurse(input_array, c_size, input_start_idx = 0,
   while (idx <= input_end_idx) &&
         ((input_end_idx - idx + 1) >= (c_size - combo_idx))
     combo[combo_idx] = input_array[idx]
-    combination_recurse(input_array, c_size, idx + 1, input_end_idx,
-                        combo, combo_idx + 1, combos)
+    combination_recurse(input_array, c_size, idx + 1, combo, combo_idx + 1, combos)
     idx += 1
   end
 
