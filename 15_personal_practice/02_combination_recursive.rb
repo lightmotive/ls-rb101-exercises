@@ -5,6 +5,12 @@
 
 # Implementation adapted from this source: https://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
 
+# TODO: encapsulate combination selection
+#   - Yield each combination as an array of indices
+#   - Select the data at those indices as a group from input_array.
+#   - Then, there's no need to pass input_array to `combination_recurse`, and
+#     the combination selection algorithm can be used with virtually any structure.
+
 # rubocop:disable Metrics/ParameterLists
 def combination_recurse(input_array, c_size, start_idx = 0,
                         combo = [], combo_idx = 0, combos = [])
@@ -12,15 +18,11 @@ def combination_recurse(input_array, c_size, start_idx = 0,
 
   end_idx = input_array.size - 1
 
-  # Replace combo_idx with all possible elements.
-  # The condition "end_idx-idx+1 >= c_size-combo_idx" ensures that
-  # including one element at combo_idx will make a combination with remaining
-  # elements at remaining positions.
-  idx = start_idx
-  while (idx <= end_idx) && ((end_idx - idx + 1) >= (c_size - combo_idx))
+  # Simpler loop adapted from [this source](https://www.baeldung.com/java-combinations-algorithm#:~:text=let's%20write%20the%20recursive%20method%20to%20implement%20this%20approach)
+  max = [end_idx, end_idx + 1 - combo.length + combo_idx].min
+  (start_idx..max).each do |idx|
     combo[combo_idx] = input_array[idx]
     combination_recurse(input_array, c_size, idx + 1, combo, combo_idx + 1, combos)
-    idx += 1
   end
 
   combos
