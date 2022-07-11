@@ -71,3 +71,36 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 #     If c_size = 2, it will recurse once.
 #     If c_size = 3, it will recurse twice, and so on.
 #     - Once our combination array size == c_size, return the combination.
+#     - Iterate through the remaining elements after the last combination's element
+
+=begin
+def combination_indices(start_idx, arr_size, c_size, combo = [])
+  - Base case x: `combo.size` == c_size and combo.last != arr_size - 1
+    - Loop through remaining indices, copying `combo` and replacing the last
+      element with the iterated index.
+      - yield each combo
+    - return
+  - Base case x: `combo.size` == c_size and combo.last == arr_size - 1
+    - yield combo
+    - return (no more recursion)
+
+  ***
+
+  - Recursion: `combo` is not yet full...
+    combination_indices(start_idx, arr_size, c_size, ...)
+    - Build each possible `combo` from start_idx:
+      - Recursive case x: `combo.size > 1` && `combo.last < (arr_size - c_size)`
+        - increment last element (index)
+      - Recursive case x: `combo.size == 1`
+        - combo << start_idx + 1
+      - Recursive case x: `combo.empty?`
+        - [start_idx]...
+end
+
+def combination(arr, c_size)
+  combos = []
+  (0..(arr.size - c_size)).each do |start_idx|
+    combos = combination_indices(start_idx, arr.size).map {|combo_indices| }
+  end
+end
+=end
