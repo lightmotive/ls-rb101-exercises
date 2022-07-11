@@ -65,3 +65,9 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 #   - iterate through all indices after idx0 to identify idx1
 #     - iterate through all indices after idx1 to identify idx2
 #       - iterate through all indices after idx2 to identify idx3
+
+# - Loop: 0..(arr.size - c_size) do |start_idx|
+#   - Dig (recurse) until `c_size - 1` levels deep:
+#     If c_size = 2, it will recurse once.
+#     If c_size = 3, it will recurse twice, and so on.
+#     - Once our combination array size == c_size, return the combination.
