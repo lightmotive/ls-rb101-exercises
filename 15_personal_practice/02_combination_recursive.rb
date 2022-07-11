@@ -60,3 +60,8 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
                                                  [13, 7, 10, 21], [13, 7, 16, 21], [13, 5, 10, 16], [13, 5, 10, 21],
                                                  [13, 5, 16, 21], [13, 10, 16, 21], [7, 5, 10, 16], [7, 5, 10, 21],
                                                  [7, 5, 16, 21], [7, 10, 16, 21], [5, 10, 16, 21]]
+
+# - idx0: iterate through all until only c_size elements remain; i.e., 0..(arr.size - c_size).
+#   - iterate through all indices after idx0 to identify idx1
+#     - iterate through all indices after idx1 to identify idx2
+#       - iterate through all indices after idx2 to identify idx3
