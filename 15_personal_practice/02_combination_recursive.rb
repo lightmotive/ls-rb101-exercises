@@ -113,17 +113,11 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 #           - yield [2, 3, 4, 5]
 
 def combination_indices_recurse(arr_size, c_size, combo: [], previous_level_idx: 0, level: 0, &block)
-  if level == c_size - 1
-    ((previous_level_idx + 1)..[arr_size - c_size + level, arr_size - 1].min).each do |idx_last|
-      combo[level] = idx_last
-      yield combo
-    end
-
-    return
-  end
+  return (yield combo) if level == c_size
 
   range_start = level.zero? ? 0 : previous_level_idx + 1
   range_end = arr_size - c_size + level
+  range_end = array_size - 1 if range_end > arr_size - 1
 
   (range_start..range_end).each do |idx|
     combo.clear if level.zero?
