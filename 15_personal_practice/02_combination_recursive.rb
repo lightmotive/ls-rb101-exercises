@@ -100,13 +100,13 @@ class ArrayCustom
   attr_reader :array
 
   def combination_indices_recurse(arr_size, c_size, combo: [], previous_level_idx: 0, level: 0, &block)
-    return (yield combo) if level == c_size
-
     range_start = level.zero? ? 0 : previous_level_idx + 1
     range_end = arr_size - c_size + level
 
     (range_start..range_end).each do |idx|
       combo[level] = idx
+      next yield combo if level == c_size - 1
+
       combination_indices_recurse(arr_size, c_size, combo: combo, previous_level_idx: idx, level: level + 1, &block)
     end
   end
@@ -125,24 +125,23 @@ def example_combination_enumeration(arr, c_size)
   p enum.next
   p enum.next
   p enum.next
-  p ArrayCustom.new(arr).combination_indices(c_size)
+  p ArrayCustom.new(arr).combination_indices(c_size).take(5)
 end
 
 example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
 
 # My solution without enumeration, which runs about 20% faster than the original
 # `combination_recurse` above.
-# rubocop:disable Metrics/ParameterLists, Metrics/AbcSize, Metrics/MethodLength
+# rubocop:disable Metrics/ParameterLists
 def combination2_recurse(input_array, c_size, combo: [], previous_level_idx: 0,
                          level: 0, combos: [])
-  return (combos << combo.dup) if level == c_size
-
   range_start = level.zero? ? 0 : previous_level_idx + 1
   range_end = input_array.size - c_size + level
-  range_end = array_size - 1 if range_end > input_array.size - 1
 
   (range_start..range_end).each do |idx|
     combo[level] = input_array[idx]
+    next (combos << combo.dup) if level == c_size - 1
+
     combination2_recurse(input_array, c_size,
                          combo: combo, previous_level_idx: idx,
                          level: level + 1, combos: combos)
@@ -150,7 +149,7 @@ def combination2_recurse(input_array, c_size, combo: [], previous_level_idx: 0,
 
   combos
 end
-# rubocop:enable Metrics/ParameterLists, Metrics/AbcSize, Metrics/MethodLength
+# rubocop:enable Metrics/ParameterLists
 
 def combination2(input_array, c_size)
   combination2_recurse(input_array, c_size)
