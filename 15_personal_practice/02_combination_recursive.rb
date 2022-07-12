@@ -111,18 +111,22 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 #       (4..4).each do |idx_offset2|
 #         (5..5).each do |idx_offset_last|
 #           - yield [2, 3, 4, 5]
-#
-def combination_indices(arr_size, c_size)
-  Enumerator.new do |y|
-    (0..arr_size - c_size).each do |start_idx|
-      ((start_idx + 1)..arr_size - c_size + 1).each do |idx_offset1|
-        ((idx_offset1 + 1)..arr_size - c_size + 2).each do |idx_offset2|
-          ((idx_offset2 + 1)..[arr_size - c_size + 3, arr_size - 1].min).each do |idx_offset_last|
-            y.yield [start_idx, idx_offset1, idx_offset2, idx_offset_last]
-          end
+
+def combination_indices_recurse(arr_size, c_size)
+  (0..arr_size - c_size).each do |start_idx|
+    ((start_idx + 1)..arr_size - c_size + 1).each do |idx_offset1|
+      ((idx_offset1 + 1)..arr_size - c_size + 2).each do |idx_offset2|
+        ((idx_offset2 + 1)..[arr_size - c_size + 3, arr_size - 1].min).each do |idx_offset_last|
+          yield [start_idx, idx_offset1, idx_offset2, idx_offset_last]
         end
       end
     end
+  end
+end
+
+def combination_indices(arr_size, c_size)
+  Enumerator.new do |y|
+    combination_indices_recurse(arr_size, c_size) { |combo| y.yield combo }
   end
 end
 
