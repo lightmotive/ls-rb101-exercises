@@ -92,7 +92,6 @@ def combination_indices_recurse(arr_size, c_size, combo: [], previous_level_idx:
   range_end = array_size - 1 if range_end > arr_size - 1
 
   (range_start..range_end).each do |idx|
-    # combo.clear if level.zero?
     combo[level] = idx
     combination_indices_recurse(arr_size, c_size, combo: combo, previous_level_idx: idx, level: level + 1, &block)
   end
@@ -110,6 +109,33 @@ def combination_via_enumeration(arr, c_size)
   end
 end
 
+# My solution without enumeration, which runs about 20% faster than the original
+# `combination_recurse` above.
+# rubocop:disable Metrics/ParameterLists, Metrics/AbcSize, Metrics/MethodLength
+def combination2_recurse(input_array, c_size, combo: [], previous_level_idx: 0,
+                         level: 0, combos: [])
+  return (combos << combo.dup) if level == c_size
+
+  range_start = level.zero? ? 0 : previous_level_idx + 1
+  range_end = input_array.size - c_size + level
+  range_end = array_size - 1 if range_end > input_array.size - 1
+
+  (range_start..range_end).each do |idx|
+    combo[level] = input_array[idx]
+    combination2_recurse(input_array, c_size,
+                         combo: combo, previous_level_idx: idx,
+                         level: level + 1, combos: combos)
+  end
+
+  combos
+end
+# rubocop:enable Metrics/ParameterLists, Metrics/AbcSize, Metrics/MethodLength
+
+def combination2(input_array, c_size)
+  combination2_recurse(input_array, c_size)
+end
+
+# Standard Library:
 def combination_std_lib(arr, c_size)
   arr.combination(c_size).to_a
 end
@@ -147,12 +173,14 @@ TESTS = [
 
 run_tests('combination', TESTS, ->(input) { combination(*input) })
 run_tests('combination_via_enum', TESTS, ->(input) { combination_via_enumeration(*input) })
+run_tests('combination2', TESTS, ->(input) { combination2(*input) })
 run_tests('combination_std_lib', TESTS, ->(input) { combination_std_lib(*input) })
 
-benchmark_report(2, 10, TESTS,
+benchmark_report(3, 50, TESTS,
                  [
                    { label: 'combination', method: ->(input) { combination(*input) } },
                    { label: 'combination_via_enum', method: ->(input) { combination_via_enumeration(*input) } },
+                   { label: 'combination2', method: ->(input) { combination2(*input) } },
                    { label: 'combination_std_lib', method: ->(input) { combination_std_lib(*input) } }
                  ])
 
