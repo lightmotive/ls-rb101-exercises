@@ -91,7 +91,7 @@ class ArrayCustom
 
   def combination_indices(size, &block)
     Enumerator.new do |y|
-      indices_recurse(array.size, size) { |combo| y.yield combo }
+      combination_indices_recurse(array.size, size) { |combo| y.yield combo }
     end.each(&block)
   end
 
@@ -99,7 +99,7 @@ class ArrayCustom
 
   attr_reader :array
 
-  def indices_recurse(arr_size, c_size, combo: [], previous_level_idx: 0, level: 0, &block)
+  def combination_indices_recurse(arr_size, c_size, combo: [], previous_level_idx: 0, level: 0, &block)
     return (yield combo) if level == c_size
 
     range_start = level.zero? ? 0 : previous_level_idx + 1
@@ -108,7 +108,7 @@ class ArrayCustom
 
     (range_start..range_end).each do |idx|
       combo[level] = idx
-      indices_recurse(arr_size, c_size, combo: combo, previous_level_idx: idx, level: level + 1, &block)
+      combination_indices_recurse(arr_size, c_size, combo: combo, previous_level_idx: idx, level: level + 1, &block)
     end
   end
 end
