@@ -113,33 +113,23 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 #           - yield [2, 3, 4, 5]
 #
 def combination_indices(arr_size, c_size)
-  # - Iterate through possible 1st indices:
-  (0..arr_size - c_size).each do |start_idx|
-    #   - Iterate through possible 2nd indices:
-    ((start_idx + 1)..arr_size - c_size + 1).each do |idx_offset1|
-      #     - Iterate through possible 3rd indices:
-      ((idx_offset1 + 1)..arr_size - c_size + 2).each do |idx_offset2|
-        #       - Iterate through possible last indices:
-        ((idx_offset2 + 1)..[arr_size - c_size + 3, arr_size - 1].min).each do |idx_offset_last|
-          yield [start_idx, idx_offset1, idx_offset2, idx_offset_last]
+  Enumerator.new do |y|
+    (0..arr_size - c_size).each do |start_idx|
+      ((start_idx + 1)..arr_size - c_size + 1).each do |idx_offset1|
+        ((idx_offset1 + 1)..arr_size - c_size + 2).each do |idx_offset2|
+          ((idx_offset2 + 1)..[arr_size - c_size + 3, arr_size - 1].min).each do |idx_offset_last|
+            y.yield [start_idx, idx_offset1, idx_offset2, idx_offset_last]
+          end
         end
       end
     end
   end
 end
 
-combination_indices(6, 4) do |combo|
-  p combo
-end
-
 def combination(arr, c_size)
-  combos = []
-
-  combination_indices(arr.size, c_size) do |combo_indices|
+  combination_indices(arr.size, c_size).each_with_object([]) do |combo_indices, combos|
     combos << combo_indices.map { |idx| arr[idx] }
   end
-
-  combos
 end
 
 p combination([12, 13, 7, 5, 10, 16], 4).map(&:sort).sort ==
