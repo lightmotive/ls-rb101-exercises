@@ -119,15 +119,21 @@ def combination_via_enumeration(arr, c_size)
 end
 
 def example_combination_enumeration(arr, c_size)
+  puts '* Enumeration *'
   enum = ArrayCustom.new(arr).combination_indices(c_size).each
   p enum.next
-  p enum.next
-  p enum.next
-  # p ArrayCustom.new(arr).combination_indices(c_size).take(5)
-  # ArrayCustom.new(arr).combination_indices(c_size) { |combo| p combo }
+  loop do
+    print 'Press enter for next combination...'
+    gets
+    p enum.next
+  rescue StopIteration
+    puts 'No more combinations.'
+    break
+  end
 end
 
-example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
+# example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
+# return
 
 # My solution without enumeration, which runs about 20% faster than the original
 # `combination_recurse` above.
