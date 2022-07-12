@@ -112,21 +112,23 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 #         (5..5).each do |idx_offset_last|
 #           - yield [2, 3, 4, 5]
 
-def combination_indices_recurse(arr_size, c_size)
-  combo = []
-  (0..arr_size - c_size).each do |idx_level0|
-    combo.clear
-    combo[0] = idx_level0
-    ((idx_level0 + 1)..arr_size - c_size + 1).each do |idx_level1|
-      combo[1] = idx_level1
-      ((idx_level1 + 1)..arr_size - c_size + 2).each do |idx_level2|
-        combo[2] = idx_level2
-        ((idx_level2 + 1)..[arr_size - c_size + 3, arr_size - 1].min).each do |idx_last|
-          combo[3] = idx_last
-          yield combo
-        end
-      end
+def combination_indices_recurse(arr_size, c_size, combo: [], previous_level_idx: 0, level: 0, &block)
+  if level == c_size - 1
+    ((previous_level_idx + 1)..[arr_size - c_size + level, arr_size - 1].min).each do |idx_last|
+      combo[level] = idx_last
+      yield combo
     end
+
+    return
+  end
+
+  range_start = level.zero? ? 0 : previous_level_idx + 1
+  range_end = arr_size - c_size + level
+
+  (range_start..range_end).each do |idx|
+    combo.clear if level.zero?
+    combo[level] = idx
+    combination_indices_recurse(arr_size, c_size, combo: combo, previous_level_idx: idx, level: level + 1, &block)
   end
 end
 
