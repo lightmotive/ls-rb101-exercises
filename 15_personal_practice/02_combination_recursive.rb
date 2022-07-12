@@ -75,14 +75,24 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 
 =begin
 - Iterate through possible 1st indices:
-  (0..arr_size - c_size) |start_idx| [0, 1, 2] (3 times)
+  (0..arr_size - c_size) |start_idx| [0, 1, 2]
   - Iterate through possible 2nd indices:
-    ((start_idx + 1)..arr_size - c_size - (start_idx + 1)) |idx_offset1| (2 times)
+    ((start_idx + 1)..arr_size - c_size + 1) |idx_offset1|
     - Iterate through possible 3rd indices:
-      ((start_idx + 2)..arr_size - c_size - (start_idx + 2)) |idx_offset2| (1 time)
+      ((idx_offset1 + 1)..arr_size - c_size + 2) |idx_offset2|
       - Iterate through possible last indices:
-        ((start_idx + 3)..arr_size - c_size - (start_idx + 3)) |idx_offset3|
-        - yield combo[start_idx, idx_offset1, idx_offset2, idx_offset3]
+        ((idx_offset2 + 1)..[arr_size - c_size + 3, arr_size - 1].max) |idx_offset_last|
+        - yield combo[start_idx, idx_offset1, idx_offset2, idx_offset_last]
+
+Given arr = [0, 1, 2, 3, 4, 5] and c_size = 4
+(0..2).each do |start_idx|
+  (1..3).each do |idx_offset1|
+    (2..4).each do |idx_offset2|
+      (3..5).each do |idx_offset_last|
+        - start_idx = 0
+          - yield [0, 1, 2, 3]
+
+
 
 def combination_indices(start_idx, arr_size, c_size, combo = [])
   # ...
