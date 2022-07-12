@@ -104,7 +104,6 @@ class ArrayCustom
 
     range_start = level.zero? ? 0 : previous_level_idx + 1
     range_end = arr_size - c_size + level
-    range_end = array_size - 1 if range_end > arr_size - 1
 
     (range_start..range_end).each do |idx|
       combo[level] = idx
