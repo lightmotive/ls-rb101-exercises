@@ -123,10 +123,8 @@ def example_combination_enumeration(arr, c_size)
   p enum.next
   p enum.next
   p enum.next
-  p enum.next
-  p enum.next
-  p ArrayCustom.new(arr).combination_indices(c_size).take(5)
-  ArrayCustom.new(arr).combination_indices(c_size) { |combo| p combo }
+  # p ArrayCustom.new(arr).combination_indices(c_size).take(5)
+  # ArrayCustom.new(arr).combination_indices(c_size) { |combo| p combo }
 end
 
 example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
