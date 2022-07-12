@@ -74,33 +74,29 @@ p combination([12, 13, 7, 5, 10, 16, 21], 4) == [[12, 13, 7, 5], [12, 13, 7, 10]
 #     - Iterate through the remaining elements after the last combination's element
 
 =begin
+- Iterate through possible 1st indices:
+  (0..arr_size - c_size) |start_idx| [0, 1, 2] (3 times)
+  - Iterate through possible 2nd indices:
+    ((start_idx + 1)..arr_size - c_size - (start_idx + 1)) |idx_offset1| (2 times)
+    - Iterate through possible 3rd indices:
+      ((start_idx + 2)..arr_size - c_size - (start_idx + 2)) |idx_offset2| (1 time)
+      - Iterate through possible last indices:
+        ((start_idx + 3)..arr_size - c_size - (start_idx + 3)) |idx_offset3|
+        - yield combo[start_idx, idx_offset1, idx_offset2, idx_offset3]
+
 def combination_indices(start_idx, arr_size, c_size, combo = [])
-  - Base case x: `combo.size` == c_size and combo.last != arr_size - 1
-    - Loop through remaining indices, copying `combo` and replacing the last
-      element with the iterated index.
-      - yield each combo
-    - return
-  - Base case x: `combo.size` == c_size and combo.last == arr_size - 1
-    - yield combo
-    - return (no more recursion)
-
-  ***
-
-  - Recursion: `combo` is not yet full...
-    combination_indices(start_idx, arr_size, c_size, ...)
-    - Build each possible `combo` from start_idx:
-      - Recursive case x: `combo.size > 1` && `combo.last < (arr_size - c_size)`
-        - increment last element (index)
-      - Recursive case x: `combo.size == 1`
-        - combo << start_idx + 1
-      - Recursive case x: `combo.empty?`
-        - [start_idx]...
+  # ...
 end
 
 def combination(arr, c_size)
   combos = []
-  (0..(arr.size - c_size)).each do |start_idx|
-    combos = combination_indices(start_idx, arr.size).map {|combo_indices| }
-  end
+
+  # (0..(arr.size - c_size)).each do |start_idx|
+  #   combination_indices(start_idx, arr.size).each do |combo_indices|
+  #     combos << combo_indices.map { |idx| arr[idx] }
+  #   end
+  # end
+
+  combos
 end
 =end
