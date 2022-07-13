@@ -90,26 +90,26 @@ class ArrayCustom
   end
 
   def combination_indices(size, &block)
-    return enum_for(:combination_indices_each, array.size, size) unless block_given?
+    return enum_for(:combination_indices_each, size) unless block_given?
 
-    combination_indices_each(array.size, size, &block)
+    combination_indices_each(size, &block)
   end
 
   private
 
   attr_reader :array
 
-  def combination_indices_each(arr_size, c_size,
+  def combination_indices_each(c_size,
                                combo: [], parent_level_idx: 0, level: 0,
                                &block)
     range_start = level.zero? ? 0 : parent_level_idx + 1
-    range_end = arr_size - c_size + level
+    range_end = array.size - c_size + level
 
     (range_start..range_end).each do |idx|
       combo[level] = idx
       next yield combo if level == c_size - 1
 
-      combination_indices_each(arr_size, c_size,
+      combination_indices_each(c_size,
                                combo: combo, parent_level_idx: idx, level: level + 1,
                                &block)
     end
@@ -220,4 +220,4 @@ benchmark_report(3, 50, TESTS,
                  ])
 
 # Not surprisingly, the Standard Library's **Array#combination** is much faster
-# than custom implementations.
+# than any custom implementation.
