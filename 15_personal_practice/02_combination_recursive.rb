@@ -99,21 +99,26 @@ class ArrayCustom
 
   attr_reader :array
 
-  def combination_indices_each(arr_size, c_size, combo: [], previous_level_idx: 0, level: 0, &block)
-    range_start = level.zero? ? 0 : previous_level_idx + 1
+  def combination_indices_each(arr_size, c_size,
+                               combo: [], parent_level_idx: 0, level: 0,
+                               &block)
+    range_start = level.zero? ? 0 : parent_level_idx + 1
     range_end = arr_size - c_size + level
 
     (range_start..range_end).each do |idx|
       combo[level] = idx
       next yield combo if level == c_size - 1
 
-      combination_indices_each(arr_size, c_size, combo: combo, previous_level_idx: idx, level: level + 1, &block)
+      combination_indices_each(arr_size, c_size,
+                               combo: combo, parent_level_idx: idx, level: level + 1,
+                               &block)
     end
   end
 end
 
 def combination_via_enumeration(arr, c_size)
-  ArrayCustom.new(arr).combination_indices(c_size).each_with_object([]) do |combo_indices, combos|
+  ArrayCustom.new(arr).combination_indices(c_size)
+             .each_with_object([]) do |combo_indices, combos|
     combos << combo_indices.map { |idx| arr[idx] }
   end
 end
@@ -121,7 +126,6 @@ end
 def example_combination_enumeration(arr, c_size)
   puts '* Enumeration *'
   enum = ArrayCustom.new(arr).combination_indices(c_size).each
-  p enum.next
   loop do
     print 'Press enter for next combination...'
     gets
@@ -130,20 +134,23 @@ def example_combination_enumeration(arr, c_size)
     puts 'No more combinations.'
     break
   end
+end
 
+def example_combination_enumerate_all
   puts '* All combinations *'
   ArrayCustom.new(arr).combination_indices(c_size) { |combo| p combo }
 end
 
 # example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
+# example_combination_enumerate_all([12, 13, 7, 5, 10, 16], 4)
 # return
 
 # My solution without enumeration, which runs about 20% faster than the original
 # `combination_recurse` above.
 # rubocop:disable Metrics/ParameterLists
-def combination2_recurse(input_array, c_size, combo: [], previous_level_idx: 0,
-                         level: 0, combos: [])
-  range_start = level.zero? ? 0 : previous_level_idx + 1
+def combination2_recurse(input_array, c_size,
+                         combo: [], parent_level_idx: 0, level: 0, combos: [])
+  range_start = level.zero? ? 0 : parent_level_idx + 1
   range_end = input_array.size - c_size + level
 
   (range_start..range_end).each do |idx|
@@ -151,7 +158,7 @@ def combination2_recurse(input_array, c_size, combo: [], previous_level_idx: 0,
     next (combos << combo.dup) if level == c_size - 1
 
     combination2_recurse(input_array, c_size,
-                         combo: combo, previous_level_idx: idx,
+                         combo: combo, parent_level_idx: idx,
                          level: level + 1, combos: combos)
   end
 
