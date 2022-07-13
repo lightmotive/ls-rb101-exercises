@@ -8,12 +8,12 @@
 # TODO: encapsulate combination selection
 #   - Yield each combination as an array of indices
 #   - Select the data at those indices as a group from input_array.
-#   - Then, there's no need to pass input_array to `combination_recurse`, and
+#   - Then, there's no need to pass input_array to `combinations_recurse`, and
 #     the combination selection algorithm can be used with virtually any structure.
 
 # rubocop:disable Metrics/ParameterLists
-def combination_recurse(input_array, c_size, start_idx = 0,
-                        combo = [], combo_idx = 0, combos = [])
+def combinations_recurse(input_array, c_size, start_idx = 0,
+                         combo = [], combo_idx = 0, combos = [])
   return (combos << combo.dup) if combo_idx == c_size
 
   end_idx = input_array.size - 1
@@ -22,15 +22,15 @@ def combination_recurse(input_array, c_size, start_idx = 0,
   max = [end_idx, end_idx + 1 - combo.length + combo_idx].min
   (start_idx..max).each do |idx|
     combo[combo_idx] = input_array[idx]
-    combination_recurse(input_array, c_size, idx + 1, combo, combo_idx + 1, combos)
+    combinations_recurse(input_array, c_size, idx + 1, combo, combo_idx + 1, combos)
   end
 
   combos
 end
 # rubocop:enable Metrics/ParameterLists
 
-def combination(input_array, c_size)
-  combination_recurse(input_array, c_size)
+def combinations_all(input_array, c_size)
+  combinations_recurse(input_array, c_size)
 end
 
 # - idx0: iterate through all until only c_size elements remain; i.e., 0..(arr.size - c_size).
@@ -90,42 +90,48 @@ class ArrayCustom
   end
 
   def combination_indices(size, &block)
-    return enum_for(:combination_indices_each, size) unless block_given?
+    return enum_for(:combination_each, size, true) unless block_given?
 
-    combination_indices_each(size, &block)
+    combination_each(size, &block)
+  end
+
+  def combination(size, &block)
+    return enum_for(:combination_each, size, false) unless block_given?
+
+    combination_each(size, &block)
   end
 
   private
 
   attr_reader :array
 
-  def combination_indices_each(c_size,
-                               combo: [], parent_level_idx: 0, level: 0,
-                               &block)
+  def combination_each(c_size, yield_indices,
+                       combo: [], parent_level_idx: 0, level: 0,
+                       &block)
     range_start = level.zero? ? 0 : parent_level_idx + 1
     range_end = array.size - c_size + level
 
     (range_start..range_end).each do |idx|
-      combo[level] = idx
+      combo[level] = yield_indices ? idx : array[idx]
       next yield combo if level == c_size - 1
 
-      combination_indices_each(c_size,
-                               combo: combo, parent_level_idx: idx, level: level + 1,
-                               &block)
+      combination_each(c_size, yield_indices,
+                       combo: combo, parent_level_idx: idx, level: level + 1,
+                       &block)
     end
   end
 end
 
-def combination_via_enumeration(arr, c_size)
-  ArrayCustom.new(arr).combination_indices(c_size)
-             .each_with_object([]) do |combo_indices, combos|
-    combos << combo_indices.map { |idx| arr[idx] }
+def combinations_via_enumeration(arr, c_size)
+  ArrayCustom.new(arr).combination(c_size)
+             .each_with_object([]) do |combo, combos|
+    combos << combo
   end
 end
 
 def example_combination_enumeration(arr, c_size)
   puts '* Enumeration *'
-  enum = ArrayCustom.new(arr).combination_indices(c_size).each
+  enum = ArrayCustom.new(arr).combination(c_size).each
   loop do
     print 'Press enter for next combination...'
     gets
@@ -138,37 +144,12 @@ end
 
 def example_combination_enumerate_all
   puts '* All combinations *'
-  ArrayCustom.new(arr).combination_indices(c_size) { |combo| p combo }
+  ArrayCustom.new(arr).combination(c_size) { |combo| p combo }
 end
 
 # example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
 # example_combination_enumerate_all([12, 13, 7, 5, 10, 16], 4)
 # return
-
-# My solution without enumeration, which runs about 20% faster than the original
-# `combination_recurse` above.
-# rubocop:disable Metrics/ParameterLists
-def combination2_recurse(input_array, c_size,
-                         combo: [], parent_level_idx: 0, level: 0, combos: [])
-  range_start = level.zero? ? 0 : parent_level_idx + 1
-  range_end = input_array.size - c_size + level
-
-  (range_start..range_end).each do |idx|
-    combo[level] = input_array[idx]
-    next (combos << combo.dup) if level == c_size - 1
-
-    combination2_recurse(input_array, c_size,
-                         combo: combo, parent_level_idx: idx,
-                         level: level + 1, combos: combos)
-  end
-
-  combos
-end
-# rubocop:enable Metrics/ParameterLists
-
-def combination2(input_array, c_size)
-  combination2_recurse(input_array, c_size)
-end
 
 # Standard Library:
 def combination_std_lib(arr, c_size)
@@ -206,16 +187,14 @@ TESTS = [
                       [7, 5, 16, 21], [7, 10, 16, 21], [5, 10, 16, 21]] }
 ].freeze
 
-run_tests('combination', TESTS, ->(input) { combination(*input) })
-run_tests('combination_via_enum', TESTS, ->(input) { combination_via_enumeration(*input) })
-run_tests('combination2', TESTS, ->(input) { combination2(*input) })
+run_tests('combinations_all', TESTS, ->(input) { combinations_all(*input) })
+run_tests('combination_via_enum', TESTS, ->(input) { combinations_via_enumeration(*input) })
 run_tests('combination_std_lib', TESTS, ->(input) { combination_std_lib(*input) })
 
 benchmark_report(3, 50, TESTS,
                  [
-                   { label: 'combination', method: ->(input) { combination(*input) } },
-                   { label: 'combination_via_enum', method: ->(input) { combination_via_enumeration(*input) } },
-                   { label: 'combination2', method: ->(input) { combination2(*input) } },
+                   { label: 'combinations_all', method: ->(input) { combinations_all(*input) } },
+                   { label: 'combination_via_enum', method: ->(input) { combinations_via_enumeration(*input) } },
                    { label: 'combination_std_lib', method: ->(input) { combination_std_lib(*input) } }
                  ])
 
