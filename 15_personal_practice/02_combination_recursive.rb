@@ -89,16 +89,10 @@ class ArrayCustom
     @array = array
   end
 
-  def combination_indices(size, &block)
-    return enum_for(:combination_each, size, true) unless block_given?
+  def combination(size, yield_indices: false, &block)
+    return enum_for(:combination_each, size, yield_indices) unless block_given?
 
-    combination_each(size, &block)
-  end
-
-  def combination(size, &block)
-    return enum_for(:combination_each, size, false) unless block_given?
-
-    combination_each(size, &block)
+    combination_each(size, yield_indices, &block)
   end
 
   private
@@ -142,9 +136,9 @@ def example_combination_enumeration(arr, c_size)
   end
 end
 
-def example_combination_enumerate_all
-  puts '* All combinations *'
-  ArrayCustom.new(arr).combination(c_size) { |combo| p combo }
+def example_combination_enumerate_all(arr, c_size)
+  puts '* All combinations of indices *'
+  ArrayCustom.new(arr).combination(c_size, yield_indices: true) { |combo| p combo }
 end
 
 # example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
