@@ -95,9 +95,8 @@ class ArrayCustom
   def combination(c_size, yield_indices: false, &block)
     return [[]] if c_size.zero?
     return [] if c_size.negative? || array.empty? || c_size > array.size
-    return enum_for(:combination_each, c_size, yield_indices).each(&block) unless block_given?
-
-    combination_each(c_size, yield_indices, &block)
+    
+    enum_for(:combination_each, c_size, yield_indices).each(&block)
   end
 
   private
@@ -112,7 +111,7 @@ class ArrayCustom
 
     (range_start..range_end).each do |idx|
       combo[level] = yield_indices ? idx : array[idx]
-      next yield combo if level == c_size - 1
+      next yield combo.dup if level == c_size - 1
 
       combination_each(c_size, yield_indices,
                        combo: combo, parent_level_idx: idx, level: level + 1,
@@ -122,15 +121,12 @@ class ArrayCustom
 end
 
 def combinations_via_enumeration(arr, c_size)
-  ArrayCustom.new(arr).combination(c_size)
-             .each_with_object([]) do |combo, combos|
-    combos << combo
-  end
+  ArrayCustom.new(arr).combination(c_size).to_a
 end
 
 def example_combination_enumeration(arr, c_size)
   puts '* Enumeration *'
-  enum = ArrayCustom.new(arr).combination(c_size).each
+  enum = ArrayCustom.new(arr).combination(c_size)
   loop do
     print 'Press enter for next combination...'
     gets
@@ -143,7 +139,7 @@ end
 
 def example_combination_enumerate_all(arr, c_size)
   puts '* All combinations of indices *'
-  ArrayCustom.new(arr).combination(c_size, yield_indices: true) { |combo| p combo }
+  ArrayCustom.new(arr).combination(c_size, yield_indices: false).each { |combo| p combo }
 end
 
 # example_combination_enumeration([12, 13, 7, 5, 10, 16], 4)
