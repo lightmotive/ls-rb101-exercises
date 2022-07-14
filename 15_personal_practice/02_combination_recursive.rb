@@ -30,6 +30,9 @@ end
 # rubocop:enable Metrics/ParameterLists
 
 def combinations_all(input_array, c_size)
+  return [[]] if c_size < 1
+  return [] if input_array.empty? || c_size > input_array.size
+
   combinations_recurse(input_array, c_size)
 end
 
@@ -89,10 +92,12 @@ class ArrayCustom
     @array = array
   end
 
-  def combination(size, yield_indices: false, &block)
-    return enum_for(:combination_each, size, yield_indices) unless block_given?
+  def combination(c_size, yield_indices: false, &block)
+    return [[]] if c_size < 1
+    return [] if array.empty? || c_size > array.size
+    return enum_for(:combination_each, c_size, yield_indices) unless block_given?
 
-    combination_each(size, yield_indices, &block)
+    combination_each(c_size, yield_indices, &block)
   end
 
   private
@@ -154,6 +159,10 @@ require_relative '../../ruby-common/benchmark_report'
 require_relative '../../ruby-common/test'
 
 TESTS = [
+  { input: [[], 1], expected_output: [] },
+  { input: [[12], 0], expected_output: [[]] },
+  { input: [[12, 2], 3], expected_output: [] },
+  { input: [[12], -1], expected_output: [[]] },
   { input: [[12], 1], expected_output: [[12]] },
   { input: [[12, 13, 7, 5], 1], expected_output: [[12], [13], [7], [5]] },
   { input: [[12, 13, 7, 5], 2], expected_output: [[12, 13], [12, 7], [12, 5], [13, 7], [13, 5], [7, 5]] },
