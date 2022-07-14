@@ -92,11 +92,11 @@ class ArrayCustom
     @array = array
   end
 
-  def combination(c_size, yield_indices: false, &block)
+  def combination(c_size, yield_indices: false)
     return [[]] if c_size.zero?
     return [] if c_size.negative? || array.empty? || c_size > array.size
-    
-    enum_for(:combination_each, c_size, yield_indices).each(&block)
+
+    enum_for(:combination_each, c_size, yield_indices)
   end
 
   private
