@@ -67,10 +67,10 @@ run_tests('range', TESTS, ->(input) { substrings_with_range(input) })
 run_tests('inject_slice', TESTS, ->(input) { substrings_with_inject_slice(input) })
 run_tests('map_slice', TESTS, ->(input) { substrings_with_map_slice(input) })
 
-benchmark_report(5, 1000, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'slice', method: ->(input) { substrings_with_slice(input) } },
                    { label: 'range', method: ->(input) { substrings_with_range(input) } },
                    { label: 'inject_slice', method: ->(input) { substrings_with_inject_slice(input) } },
                    { label: 'map_slice', method: ->(input) { substrings_with_map_slice(input) } }
-                 ])
+                 ], iterations: 1000)

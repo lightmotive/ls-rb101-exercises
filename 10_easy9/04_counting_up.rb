@@ -33,11 +33,11 @@ end
 
 run_tests('to_a', TESTS, ->(input) { sequence_with_to_a(input) })
 
-benchmark_report(1, 2, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'splat', method: ->(input) { sequence_with_splat(input) } },
                    { label: 'to_a', method: ->(input) { sequence_with_to_a(input) } }
-                 ])
+                 ], iterations: 2)
 
 # to_a is consistently around 1.06 - 1.15x faster with larger collections. Probably not going to be a bottleneck in a
 #   typical Ruby application.

@@ -190,12 +190,12 @@ run_tests('combinations_all', TESTS, ->(input) { combinations_all(*input) })
 run_tests('combination_via_enum', TESTS, ->(input) { combinations_via_enumeration(*input) })
 run_tests('combination_std_lib', TESTS, ->(input) { combination_std_lib(*input) })
 
-benchmark_report(3, 50, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'combinations_all', method: ->(input) { combinations_all(*input) } },
                    { label: 'combination_via_enum', method: ->(input) { combinations_via_enumeration(*input) } },
                    { label: 'combination_std_lib', method: ->(input) { combination_std_lib(*input) } }
-                 ])
+                 ], iterations: 50)
 
 # Not surprisingly, the Standard Library's **Array#combination** is much faster
 # than any custom implementation.

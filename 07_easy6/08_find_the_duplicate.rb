@@ -87,7 +87,7 @@ run_tests('find_dup_by_each_with_index', TESTS, ->(input) { find_dup_by_each_wit
 
 # run_tests("find_dup_by_index", TESTS, ->(input) { find_dup_by_index(input) })
 
-benchmark_report(2, 10, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'Iteration', method: ->(input) { find_dup_by_iteration(input) } },
                    { label: 'Each with Index', method: ->(input) { find_dup_by_each_with_index(input) } }
@@ -97,4 +97,4 @@ benchmark_report(2, 10, TESTS,
                    #  { label: 'Neighboring Index', method: ->(input) { find_dup_by_neighboring_index(input) } },
                    #  { label: 'Count', method: ->(input) { find_dup_by_count(input) } },
                    #  { label: 'Index', method: ->(input) { find_dup_by_index(input) } }
-                 ])
+                 ], iterations: 10)

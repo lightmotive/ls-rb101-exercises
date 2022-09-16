@@ -50,8 +50,8 @@ TESTS = [
 run_tests('crunch_iterate', TESTS, ->(input) { crunch_iterate(input) })
 run_tests('crunch_regex', TESTS, ->(input) { crunch_regex(input) })
 
-benchmark_report(5, 500, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'Iteration', method: ->(string) { crunch_iterate(string) } },
                    { label: 'Regex', method: ->(string) { crunch_regex(string) } }
-                 ])
+                 ], iterations: 500)

@@ -47,9 +47,9 @@ end
 
 run_tests('swapcase_with_ruby', TESTS, ->(input) { swapcase_with_ruby(input) })
 
-benchmark_report(2, 50_000, TESTS,
+benchmark_report(TESTS,
                  [
                    { label: 'Mostly Declarative', method: ->(input) { swapcase_with_regexp(input) } },
                    { label: 'Somewhat Imperative', method: ->(input) { swapcase_with_ord(input) } },
                    { label: 'Entirely Declarative', method: ->(input) { swapcase_with_ruby(input) } }
-                 ])
+                 ], iterations: 50_000)
